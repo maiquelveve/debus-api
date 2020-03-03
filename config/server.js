@@ -1,7 +1,6 @@
 let express = require('express');
 let consign = require('consign');
 let bodyParser = require('body-parser');
-let expressValidator = require('express-validator');
 let expressSession = require('express-session');
 let multParty = require('connect-multiparty');
 let objextId =  require('mongodb').ObjectId;
@@ -11,7 +10,6 @@ let app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(multParty());
-app.use(expressValidator());
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
