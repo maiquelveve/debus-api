@@ -11,7 +11,7 @@ let app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(multParty());
-//app.use(expressValidator());
+app.use(expressValidator());
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
