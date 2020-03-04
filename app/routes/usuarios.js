@@ -22,9 +22,33 @@ module.exports = (aplicacao) => {
                 return res.status(200).json(errosResult);
             }
 
-
             try {
                 aplicacao.app.controllers.usuariosController.cadastrar(aplicacao, req, res);
+                
+            } catch (error) {
+                res.json(error);
+            }
+        }
+    );
+
+    aplicacao.post
+    ( 
+        '/usuarios/verficarEmailJaCadastrado', 
+        [
+            check('st_email').isEmail(),
+            check('st_email').notEmpty()
+        ],   
+        (req, res) => {
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                let errosResult = []
+                errosResult.unshift({success: 0, status: 'error', error: 'formError', erroCode: 'form_inputs_check_email_invalided' }) 
+                return res.status(200).json(errosResult);
+            }
+
+            try {
+                aplicacao.app.controllers.usuariosController.verficarEmailJaCadastrado(aplicacao, req, res);
                 
             } catch (error) {
                 res.json(error);
