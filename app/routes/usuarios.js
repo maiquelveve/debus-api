@@ -5,10 +5,13 @@ module.exports = (aplicacao) => {
     (
         '/usuarios/cadastrar', 
         [
+            check('st_email').notEmpty().withMessage('Email é obrigatorio.'),
             check('st_email').isEmail().withMessage('Email não é valido.'),
-            check('st_email').isLength({ min: 1 }).withMessage('Email é obrigatorio.'),
-            check('st_senha').isLength({ min: 1 }).withMessage('Senha é obrigatorio.'),
-            check('st_nome').isLength({ min: 1 }).withMessage('Nome é obrigatorio.')
+            check('st_senha').notEmpty().withMessage('Senha é obrigatorio.'),
+            check('st_nome').notEmpty().withMessage('Nome é obrigatorio.'),
+            check('st_nome').isLength({ max:20 }).withMessage('Nome maior que 20 caracteres.'),
+            check('st_senha').isLength({ max:35 }).withMessage('Senha maior que 35 caracteres.'),
+            check('st_email').isLength({ max:25 }).withMessage('Email maior que 25 caracteres.'),
         ],   
         (req, res) => {
 
