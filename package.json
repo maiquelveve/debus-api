@@ -5,7 +5,11 @@
   "repository": "https://github.com/maiquelveve/debus-api.git",
   "author": "maiquelveve <maiquelveve2008@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "sucrase": "^3.12.1"
   }
 }
