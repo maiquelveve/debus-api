@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
+import UsuariosController from './app/controllers/UsuariosController';
+
 const routes = new Router()
 
-routes.get('/', (req, res) => {
-    return res.json({ok:true})
-})
+routes.post('/usuarios/cadastrar', UsuariosController.cadastrar)
 
 export default routes
