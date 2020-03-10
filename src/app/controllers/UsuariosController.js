@@ -5,10 +5,10 @@ class UsuariosController {
     async cadastrar(req, res) {
         const usuario = await Usuario.create(req.body);
         const retorno = [{success: 1, msg: 'ok', user: usuario}]
-        //const retorno = [{success: 0, msg: 'erro'}, {msg:'nome obrigatorio'}]
+        //const retorno = [{success: 0, msg:'Email já cadastrado'}]
         
-        return res.json(retorno)
+        return res.status(200).json(retorno)
     }
 }
 
-export default new UsuariosController(); 
+export default new UsuariosController();  
