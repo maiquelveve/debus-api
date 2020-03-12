@@ -53,52 +53,58 @@ class UsuariosController {
     }
 
     async login(req, res) {
-        //Validaçõe do req.body Inicio
-        yup.setLocale(validacaoDefinicao)
-        const schemaValidate = yup.object().shape({                
-            st_email: yup
-                .string()
-                .max(50)
-                .email()
-                .required(),
-                
-            st_senha: yup    
-                .string()
-                .max(50)
-                .required()
-        })
-        
-        const retornoError = {success: 0, msg: 'Email ou Senha invalidos!'}
-        const erros = await schemaValidate.validate(req.body, { abortEarly: false }).then( () => false ).catch( () => true);
-        if(erros === true) {
-            
-            return res.status(401).json(retornoError)
-        }
-        //Validaçõe do req.body Final
-
-        let {st_email, st_senha} = req.body;        
-        const usuario = await Usuario.findOne({ where: {st_email} })
-
-        if(!usuario) {
-            return res.status(401).json(retornoError)
-        } 
-
-        if(!(await usuario.compararSenhas(st_senha))) {
-            return res.status(401).json(retornoError)
-        }
-
-        const { id } = usuario;
-
-        return res.status(201).json({
-            success: 1,
-            usuario: {
-                id,
-                st_email
-            },
-            token: jwt.sign({ id }, authConfig.secret, {
-                expiresIn: authConfig.expiresIn 
+        try {
+            //Validaçõe do req.body Inicio
+            yup.setLocale(validacaoDefinicao)
+            const schemaValidate = yup.object().shape({                
+                st_email: yup
+                    .string()
+                    .max(50)
+                    .email()
+                    .required(),
+                    
+                st_senha: yup    
+                    .string()
+                    .max(50)
+                    .required()
             })
-        });
+            
+            const retornoError = {success: 0, msg: 'Email ou Senha invalidos!'}
+            const erros = await schemaValidate.validate(req.body, { abortEarly: false }).then( () => false ).catch( () => true);
+            if(erros === true) {
+                
+                return res.status(401).json(retornoError)
+            }
+            //Validaçõe do req.body Final
+
+            let {st_email, st_senha} = req.body;        
+            const usuario = await Usuario.findOne({ where: {st_email} })
+
+            if(!usuario) {
+                return res.status(401).json(retornoError)
+            } 
+
+            if(!(await usuario.compararSenhas(st_senha))) {
+                return res.status(401).json(retornoError)
+            }
+
+            const { id } = usuario;
+
+            return res.status(201).json({
+                success: 1,
+                usuario: {
+                    id,
+                    st_email
+                },
+                token: jwt.sign({ id }, authConfig.secret, {
+                    expiresIn: authConfig.expiresIn 
+                })
+            });
+            
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Verifique os dados informados!'}]                
+            return res.status(400).json(retorno)
+        }
     }
 }
 
