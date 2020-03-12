@@ -68,10 +68,11 @@ class UsuariosController {
                 .required()
         })
         
+        const retornoError = {success: 0, msg: 'Email ou Senha invalidos!'}
         const erros = await schemaValidate.validate(req.body, { abortEarly: false }).then( () => false ).catch( () => true);
         if(erros === true) {
-            const retorno = [{success: 0, msg: 'Email ou Senha invalidos!'}]
-            return res.status(401).json(retorno)
+            
+            return res.status(401).json(retornoError)
         }
         //Validaçõe do req.body Final
 
@@ -79,18 +80,17 @@ class UsuariosController {
         const usuario = await Usuario.findOne({ where: {st_email} })
 
         if(!usuario) {
-            const retorno = [{success: 0, msg: 'Email ou Senha invalidos!'}]
-            return res.status(401).json(retorno)
+            return res.status(401).json(retornoError)
         } 
 
         if(!(await usuario.compararSenhas(st_senha))) {
-            const retorno = [{success: 0, msg: 'Email ou Senha invalidos!'}]
-            return res.status(401).json(retorno)
+            return res.status(401).json(retornoError)
         }
 
         const { id } = usuario;
 
         return res.status(201).json({
+            success: 1,
             usuario: {
                 id,
                 st_email
