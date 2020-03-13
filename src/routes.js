@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import UsuariosController from './app/controllers/UsuariosController';
-import ConfigController from './app/controllers/ConfigContrpller';
+import ConfigController from './app/controllers/ConfigController';
 
 const routes = new Router()
 
