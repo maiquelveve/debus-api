@@ -9,7 +9,8 @@ class Veiculo extends Model {
                 id_empresa: Sequelize.STRING
             },
             {
-                sequelize
+                sequelize,
+                modelName: 'veiculos'
             }
         );
  

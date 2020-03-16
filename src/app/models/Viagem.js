@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 
-class Viagen extends Model {
+class Viagem extends Model {
     static init(sequelize) {
         super.init(
             {
@@ -12,7 +12,8 @@ class Viagen extends Model {
                 en_situacao: Sequelize.STRING,
             },
             {
-                sequelize
+                sequelize,
+                modelName: 'viagens'
             }
         );
  
@@ -20,4 +21,4 @@ class Viagen extends Model {
     }
 }
 
-export default Viagen; 
+export default Viagem; 

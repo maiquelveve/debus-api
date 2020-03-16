@@ -10,7 +10,8 @@ class Usuario extends Model {
                 st_senha: Sequelize.STRING
             },
             {
-                sequelize
+                sequelize,
+                modelName: 'usuarios'
             }
         );
 
