@@ -2,7 +2,7 @@ import Viagem from '../models/Viagem';
 
 class ViagensController {
     async index(req, res) {
-        const viagem = await Viagem.findAll({include:['veiculo']});
+        const viagem = await Viagem.findAll({include:['veiculo', 'local_referencia_origem', 'local_referencia_destino']});
         res.json(viagem)
     }
 }

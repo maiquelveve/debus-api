@@ -1,6 +1,7 @@
 import Sequelize, { Model } from 'sequelize';
 
 class Viagem extends Model {
+    
     static init(sequelize) {
         super.init(
             {
@@ -22,6 +23,8 @@ class Viagem extends Model {
 
     static associate(models) {
         this.belongsTo(models.Veiculo, { foreignKey: 'id_veiculo', as: 'veiculo' });
+        this.belongsTo(models.LocalReferencia, { foreignKey: 'nr_id_local_referencia_origem', as: 'local_referencia_origem' });
+        this.belongsTo(models.LocalReferencia, { foreignKey: 'nr_id_local_referencia_destino', as: 'local_referencia_destino' });
     }
 }
 
