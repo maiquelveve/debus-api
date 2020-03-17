@@ -6,15 +6,19 @@ class Veiculo extends Model {
             {
                 st_placa: Sequelize.STRING,
                 nr_lugares: Sequelize.INTEGER,
-                id_empresa: Sequelize.STRING
             },
             {
                 sequelize,
-                modelName: 'veiculos'
+                modelName: 'Veiculo',
+                tableName: 'veiculos'
             }
         );
  
         return this;
+    }
+
+    static associate(models) {
+        this.belongsTo(models.Empresa, { foreignKey: 'id_empresa', as: 'empresa' });
     }
 }
 

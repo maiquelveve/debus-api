@@ -8,16 +8,20 @@ class Viagem extends Model {
                 hh_horario: Sequelize.TIME,
                 nr_id_local_referencia_origem: Sequelize.INTEGER,
                 nr_id_local_referencia_destino: Sequelize.INTEGER,
-                id_veiculo: Sequelize.INTEGER,
                 en_situacao: Sequelize.STRING,
             },
             {
                 sequelize,
-                modelName: 'viagens'
+                modelName: 'Viagem',
+                tableName: 'viagens'
             }
         );
  
         return this;
+    }
+
+    static associate(models) {
+        this.belongsTo(models.Veiculo, { foreignKey: 'id_veiculo', as: 'veiculo' });
     }
 }
 
