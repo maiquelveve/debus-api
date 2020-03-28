@@ -20,6 +20,8 @@ routes.use(authMiddleware)
 routes.get('/veiculos', VeiculosController.index);
 routes.post('/empresas', EmpresasController.cadastrar);
 routes.get('/empresas', EmpresasController.listar);
+routes.get('/empresas/:id', EmpresasController.buscarEmpresa);
+routes.put('/empresas/:id', EmpresasController.editar);
 routes.get('/viagens', ViagensController.index);
 
 export default routes
