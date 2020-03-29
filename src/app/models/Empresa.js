@@ -6,7 +6,8 @@ class Empresa extends Model {
             {
                 st_nome: Sequelize.STRING,
                 st_recefi: Sequelize.STRING,
-                st_cel: Sequelize.STRING
+                st_cel: Sequelize.STRING,
+                ch_ativo: Sequelize.STRING,
             },
             {
                 sequelize, 
