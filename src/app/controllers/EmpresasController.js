@@ -63,6 +63,36 @@ class EmpresasController {
         }
     }
 
+    async ativar(req, res) {
+        try {
+            const { id_usuario } = req.body
+            const { id } = req.params
+
+            await Empresa.update({ ch_ativo: 'S' }, {where: { id, id_usuario}})
+            const retorno = [{success: 1, msg: 'ok'}]
+            res.status(200).json(retorno)
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]
+            res.status(400).json(retorno)
+        }
+    }
+
+    async desativar(req, res) {
+        try {
+            const { id_usuario } = req.body
+            const { id } = req.params
+
+            await Empresa.update({ ch_ativo: 'N' }, {where: { id, id_usuario}})
+            const retorno = [{success: 1, msg: 'ok'}]
+            res.status(200).json(retorno)
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]
+            res.status(400).json(retorno)
+        }
+    }
+
     async listar(req, res) {
         try {
             const { id_usuario } = req.body
