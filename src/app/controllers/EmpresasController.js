@@ -117,7 +117,9 @@ class EmpresasController {
 
     async buscarEmpresa(req, res) {
         try {
-            const empresa = await Empresa.findOne({where: { id: req.params.id } })
+            const id_usuario = req.body.id_usuario
+            const id = req.params.id
+            const empresa = await Empresa.findOne({ where: { id, id_usuario } })
             return res.status(200).json(empresa);
 
         } catch (error) {
