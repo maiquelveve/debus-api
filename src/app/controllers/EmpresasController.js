@@ -97,8 +97,9 @@ class EmpresasController {
     async listar(req, res) {
         try {
             const { id_usuario } = req.body
-            const {st_nome, st_recefi} = req.query   
-            
+            const {st_nome, st_recefi, ch_ativo} = req.query   
+            console.log(req.query)
+
             let where = {id_usuario}
             if(st_nome.trim() !== '') {
                 where.st_nome = {[Op.substring]: [st_nome]}
@@ -106,8 +107,12 @@ class EmpresasController {
             if(st_recefi.trim() !== '') {
                 where.st_recefi = st_recefi
             }
-            //st_nome: {[Op.substring]: [st_nome]} eh o operado igual a CAMPO LIKE '%text%'
-            const retorno = await Empresa.findAll({where, limit: 10 })            
+            if(ch_ativo.trim() === 'S' || ch_ativo.trim() === 'N') {
+                where.ch_ativo = ch_ativo
+            }
+            
+            const retorno = await Empresa.findAll({ where, limit: 10, order: [['ch_ativo', 'DESC'], ['id', 'ASC']] }) //st_nome: {[Op.substring]: [st_nome]} eh o operado igual a CAMPO LIKE '%text%'           
+
             return res.status(200).json(retorno)   
 
         } catch (error) {
