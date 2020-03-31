@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Empresa from '../models/Empresa';
 import * as yup from 'yup';
 import validacaoDefinicao from '../../config/validacaoDefinicao';
@@ -100,16 +101,17 @@ class EmpresasController {
             
             let where = {id_usuario}
             if(st_nome.trim() !== '') {
-                where.st_nome = st_nome
+                where.st_nome = {[Op.substring]: [st_nome]}
             }
             if(st_recefi.trim() !== '') {
                 where.st_recefi = st_recefi
             }
-
-            const retorno = await Empresa.findAll({ where, limit: 10 })            
-            return res.status(200).json(retorno) 
+            //st_nome: {[Op.substring]: [st_nome]} eh o operado igual a CAMPO LIKE '%text%'
+            const retorno = await Empresa.findAll({where, limit: 10 })            
+            return res.status(200).json(retorno)   
 
         } catch (error) {
+            console.log(error)
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
             return res.status(400).json(retorno)  
         }
