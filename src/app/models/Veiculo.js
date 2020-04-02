@@ -6,6 +6,7 @@ class Veiculo extends Model {
             {
                 st_placa: Sequelize.STRING,
                 nr_lugares: Sequelize.INTEGER,
+                ch_ativo: Sequelize.INTEGER
             },
             {
                 sequelize,
