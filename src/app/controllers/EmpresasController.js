@@ -134,6 +134,18 @@ class EmpresasController {
             return res.status(400).json(retorno)  
         }
     }
+
+    async buscarEmpresasUsuario(req, res) {
+        try {
+            const {id_usuario} = req.body;
+            const empresas = await Empresa.findAll({ where: {id_usuario}})
+            res.status(200).json(empresas)
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
+            return res.status(400).json(retorno)  
+        }
+    }
 }
 
 function ajustarEmpresaParaBanco(empresa) {

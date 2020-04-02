@@ -17,9 +17,10 @@ routes.post('/usuarios/login', UsuariosController.login)
 //daqui para baixo somente as rotas de usuarios logados
 routes.use(authMiddleware)
 
-routes.get('/veiculos', VeiculosController.index);
+routes.get('/veiculos', VeiculosController.listar);
 routes.post('/empresas', EmpresasController.cadastrar);
 routes.get('/empresas', EmpresasController.listar);
+routes.get('/empresas/buscarDoUsuario', EmpresasController.buscarEmpresasUsuario)
 routes.get('/empresas/:id', EmpresasController.buscarEmpresa);
 routes.put('/empresas/:id', EmpresasController.editar);
 routes.put('/empresas/ativar/:id', EmpresasController.ativar);
