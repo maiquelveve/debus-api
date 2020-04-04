@@ -26,7 +26,7 @@ class EmpresasController {
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
-            return res.status(400).json(retorno)  
+            return res.status(500).json(retorno)  
         }
     }
 
@@ -60,7 +60,7 @@ class EmpresasController {
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
-            return res.status(400).json(retorno)  
+            return res.status(500).json(retorno)  
         }
     }
 
@@ -75,7 +75,7 @@ class EmpresasController {
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]
-            res.status(400).json(retorno)
+            res.status(500).json(retorno)
         }
     }
 
@@ -90,7 +90,7 @@ class EmpresasController {
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]
-            res.status(400).json(retorno)
+            res.status(500).json(retorno)
         }
     }
 
@@ -116,9 +116,8 @@ class EmpresasController {
             return res.status(200).json(retorno)   
 
         } catch (error) {
-            console.log(error)
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
-            return res.status(400).json(retorno)  
+            return res.status(500).json(retorno)  
         }
     }
 
@@ -131,7 +130,7 @@ class EmpresasController {
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
-            return res.status(400).json(retorno)  
+            return res.status(500).json(retorno)  
         }
     }
 
@@ -143,7 +142,7 @@ class EmpresasController {
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
-            return res.status(400).json(retorno)  
+            return res.status(500).json(retorno)  
         }
     }
 }

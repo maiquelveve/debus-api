@@ -17,6 +17,7 @@ routes.post('/usuarios/login', UsuariosController.login)
 //daqui para baixo somente as rotas de usuarios logados
 routes.use(authMiddleware)
 
+routes.post('/veiculos', VeiculosController.cadastrar);
 routes.get('/veiculos', VeiculosController.listar);
 routes.put('/veiculos/ativar/:id', VeiculosController.ativar);
 routes.put('/veiculos/desativar/:id', VeiculosController.desativar);
