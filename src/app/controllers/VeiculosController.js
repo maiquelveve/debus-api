@@ -52,8 +52,10 @@ class VeiculosController {
             const sql = `SELECT V.id, V.st_placa, V.nr_lugares, V.ch_ativo, E.st_nome 
                          FROM veiculos V 
                             INNER JOIN empresas E ON E.id = V.id_empresa 
-                        ${where}`;
-            const veiculos =  await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT})                        
+                        ${where}
+                        ORDER BY ch_ativo DESC, id ASC
+                        LIMIT 10`;
+            const veiculos = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT})                        
             res.status(200).json(veiculos)
 
         } catch (error) {
