@@ -34,7 +34,8 @@ class VeiculosController {
     async listar(req, res) {
         try {
             const {id_usuario} = req.body;
-            const {st_placa, id_empresa, ch_ativo } = req.query;
+            const { id_empresa, ch_ativo } = req.query;
+            const st_placa = req.query.st_placa.normalize('NFD').replace(/[^a-zA-Z0-9s]/g, "").toUpperCase()
 
             let where = `WHERE E.ch_ativo = 'S' AND E.id_usuario = ${id_usuario}`;
             if(st_placa.trim() !== '') {
@@ -56,6 +57,7 @@ class VeiculosController {
             res.status(200).json(veiculos)
 
         } catch (error) {
+            console.log(error)
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
             return res.status(500).json(retorno) 
         }
