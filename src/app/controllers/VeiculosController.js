@@ -30,6 +30,42 @@ class VeiculosController {
             return res.status(500).json(retorno)
         }
     }
+
+    async editar(req, res) {
+        try {
+            let veiculo = ajustarVeiculoParaBanco(req.body)
+            const id = parseInt(req.params.id)
+
+            const errors = await validaVeiculo(veiculo)
+            if(errors[0].success === 0) {
+                return res.status(400).json(errors)  
+            }
+
+            //Buscar para ver se o veiculo eh do usuario mesmo se não for ou se não existir retorna erro
+            const veiculoAtual = await Veiculo.findOne({where:{id}})
+            if(!veiculoAtual) {
+                const retorno = [{success: 0, msg: 'Veiculo não existe no sistema.'}]                
+                return res.status(500).json(retorno)
+            }
+
+            //Se houve mudaça na empresa ou na placa tem que ser validado se já exixste no sistema
+            if(veiculoAtual.st_placa !== veiculo.st_placa || parseInt(veiculoAtual.id_empresa) !== parseInt(veiculo.id_empresa)) {
+                const veiculoExists = await verificaVeiculoExiste(veiculo)
+                if(veiculoExists[0].success === 0) {
+                    return res.status(400).json(veiculoExists)  
+                }
+            }
+            
+            await Veiculo.update(veiculo, {where:{id}})
+
+            const retorno = [{success: 1, msg: 'ok'}]
+            return res.status(200).json(retorno)
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]
+            return res.status(500).json(retorno)
+        }
+    }
     
     async listar(req, res) {
         try {
@@ -59,9 +95,28 @@ class VeiculosController {
             res.status(200).json(veiculos)
 
         } catch (error) {
-            console.log(error)
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
             return res.status(500).json(retorno) 
+        }
+    }
+
+    async buscarVeiculo(req, res) {
+        try {
+            const id_usuario = req.body.id_usuario
+            const { id } = req.params
+            
+            const sequelize = new Sequelize(dataBaseConfig);
+            const sql = `SELECT V.id, V.st_placa, V.nr_lugares, V.id_empresa 
+                         FROM veiculos V 
+                            INNER JOIN empresas E ON E.id = V.id_empresa 
+                         WHERE E.id_usuario = ${id_usuario} AND V.ch_ativo = 'S' AND V.id = ${id}`
+            const veiculo = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT}) 
+            return res.status(200).json(veiculo[0])      
+
+        } catch (error) {
+            console.log(error)
+            const retorno = [{success: 0, msg: 'Ocorreu um erro ao buscar o veículo. Tente novamente mais tarde!'}]                
+            return res.status(500).json(retorno)
         }
     }
 
