@@ -6,7 +6,7 @@ class Cidade extends Model {
         super.init(
             {
                 st_nome: Sequelize.STRING,
-                ibege: Sequelize.INTEGER
+                ibge: Sequelize.INTEGER
             },
             {
                 sequelize,
