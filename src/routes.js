@@ -26,6 +26,7 @@ routes.use(authMiddleware)
 
 routes.post('/veiculos', VeiculosController.cadastrar);
 routes.get('/veiculos', VeiculosController.listar);
+routes.get('/veiculos/buscarVeiculosPorEmpresa', VeiculosController.buscarVeiculosPorEmpresa)
 routes.get('/veiculos/:id', VeiculosController.buscarVeiculo);
 routes.put('/veiculos/:id', VeiculosController.editar);
 routes.put('/veiculos/ativar/:id', VeiculosController.ativar);
