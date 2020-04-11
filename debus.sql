@@ -1,129 +1,108 @@
-DROP DATABASE IF EXISTS debus;
-CREATE DATABASE IF NOT EXISTS debus DEFAULT CHARACTER SET utf8 ;
-USE debus;
+-- phpMyAdmin SQL Dump
+-- version 5.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Tempo de geração: 12-Abr-2020 às 00:53
+-- Versão do servidor: 10.4.11-MariaDB
+-- versão do PHP: 7.4.1
 
-DROP TABLE IF EXISTS debus.usuarios;
-CREATE TABLE IF NOT EXISTS debus.usuarios (
-  id     	INT          NOT NULL AUTO_INCREMENT,
-  st_nome   VARCHAR(100) NOT NULL,
-  st_email  VARCHAR(100) NOT NULL,
-  st_senha  CHAR(128)    NOT NULL,
-  
-  PRIMARY KEY (id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-
-DROP TABLE IF EXISTS debus.empresas;
-CREATE TABLE IF NOT EXISTS debus.empresas (
-  id         INT NOT NULL AUTO_INCREMENT,
-  st_recefi  VARCHAR(45) NULL,
-  st_cel     VARCHAR(13) NULL,
-  
-  id_usuario INT NOT NULL,
-  
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_usuario) REFERENCES debus.usuarios (id) 
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
-DROP TABLE IF EXISTS debus.veiculos;
-CREATE TABLE IF NOT EXISTS debus.veiculos (
-  id          INT NOT NULL AUTO_INCREMENT,  
-  st_placa    VARCHAR(10) NULL,
-  nr_lugares  INT NULL,
-  id_empresa  INT NOT NULL,
-  
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_empresa) REFERENCES debus.empresas (id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Banco de dados: `debus`
+--
 
-DROP TABLE IF EXISTS debus.pais;
-CREATE TABLE IF NOT EXISTS debus.pais (
-  id     	INT NOT NULL AUTO_INCREMENT,
-  ch_sigla  VARCHAR(45) NULL,
-  st_nome   VARCHAR(60) NULL,
-  
-  PRIMARY KEY (id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+-- --------------------------------------------------------
 
+--
+-- Estrutura da tabela `cidades`
+--
+-- Erro ao ler a estrutura para a tabela debus.cidades: #1932 - Table 'debus.cidades' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.cidades: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`cidades`' na linha 1
 
-DROP TABLE IF EXISTS debus.Estados ;
-CREATE TABLE IF NOT EXISTS debus.Estados (
-  id       INT NOT NULL AUTO_INCREMENT,
-  ch_sigla VARCHAR(2) NULL,
-  st_nome  VARCHAR(60) NULL,
-  id_pais  INT NOT NULL,
-  
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_pais) REFERENCES debus.pais (id) 
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+-- --------------------------------------------------------
 
+--
+-- Estrutura da tabela `empresas`
+--
+-- Erro ao ler a estrutura para a tabela debus.empresas: #1932 - Table 'debus.empresas' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.empresas: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`empresas`' na linha 1
 
-DROP TABLE IF EXISTS debus.cidades ;
-CREATE TABLE IF NOT EXISTS debus.cidades (
-  id        INT NOT NULL AUTO_INCREMENT,
-  id_Estado INT NOT NULL,
-  st_nome   VARCHAR(128) NOT NULL,
-  ibge      INT NOT NULL,
-  
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_Estado) REFERENCES debus.Estados (id) 
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+-- --------------------------------------------------------
 
+--
+-- Estrutura da tabela `estados`
+--
+-- Erro ao ler a estrutura para a tabela debus.estados: #1932 - Table 'debus.estados' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.estados: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`estados`' na linha 1
 
-DROP TABLE IF EXISTS debus.locais_referencias;
-CREATE TABLE IF NOT EXISTS debus.locais_referencias (
-  id        INT NOT NULL AUTO_INCREMENT,
-  st_dsc    VARCHAR(128) NULL,
-  id_cidade INT NOT NULL,
-  
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_cidade) REFERENCES debus.cidades (id) 
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+-- --------------------------------------------------------
 
+--
+-- Estrutura da tabela `locais_referencias`
+--
+-- Erro ao ler a estrutura para a tabela debus.locais_referencias: #1932 - Table 'debus.locais_referencias' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.locais_referencias: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`locais_referencias`' na linha 1
 
-DROP TABLE IF EXISTS debus.viagens;
-CREATE TABLE IF NOT EXISTS debus.viagens (
-  id                          	 INT NOT NULL AUTO_INCREMENT,
-  vagas                       	 INT NULL, 
-  hh_horario                  	 TIME NULL,
-  nr_id_local_referencia_origem  INT NOT NULL,
-  nr_id_local_referencia_destino INT NOT NULL,   
-  id_veiculo                     INT NOT NULL,  
-  en_situacao                    ENUM('confirmada', 'aguardando confirmação', 'cancelada') NULL,
-  
-  
-  PRIMARY KEY (id),
-  FOREIGN KEY (nr_id_local_referencia_origem) REFERENCES debus.locais_referencias (id),  
-  FOREIGN KEY (nr_id_local_referencia_destino)REFERENCES debus.locais_referencias (id),    
-  FOREIGN KEY (id_veiculo)                 REFERENCES debus.veiculos          (id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+-- --------------------------------------------------------
 
+--
+-- Estrutura da tabela `pais`
+--
+-- Erro ao ler a estrutura para a tabela debus.pais: #1932 - Table 'debus.pais' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.pais: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`pais`' na linha 1
 
+-- --------------------------------------------------------
 
-DROP TABLE IF EXISTS debus.passageiros; 
-CREATE TABLE IF NOT EXISTS debus.passageiros (
-  id         INT NOT NULL AUTO_INCREMENT,  
-  st_nome       VARCHAR(100) NOT NULL,
-  st_cpf       	CHAR(11) NULL,
-  
-  id_usuario INT NOT NULL,
-  
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_usuario) REFERENCES debus.usuarios (id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+--
+-- Estrutura da tabela `passageiros`
+--
+-- Erro ao ler a estrutura para a tabela debus.passageiros: #1932 - Table 'debus.passageiros' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.passageiros: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`passageiros`' na linha 1
 
+-- --------------------------------------------------------
 
+--
+-- Estrutura da tabela `usuarios`
+--
+-- Erro ao ler a estrutura para a tabela debus.usuarios: #1932 - Table 'debus.usuarios' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.usuarios: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`usuarios`' na linha 1
 
-DROP TABLE IF EXISTS debus.viagens_passageiros ;
-CREATE TABLE IF NOT EXISTS debus.viagens_passageiros (
-  id               INT NOT NULL AUTO_INCREMENT,
-  id_viagem        INT NOT NULL,
-  id_passageiro    INT NOT NULL,
-  
-  PRIMARY KEY (id), 
-  FOREIGN KEY (id_viagem)        REFERENCES debus.viagens (id),
-  FOREIGN KEY (id_passageiro) REFERENCES debus.passageiros (id)
-    
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `veiculos`
+--
+-- Erro ao ler a estrutura para a tabela debus.veiculos: #1932 - Table 'debus.veiculos' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.veiculos: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`veiculos`' na linha 1
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `viagens`
+--
+-- Erro ao ler a estrutura para a tabela debus.viagens: #1932 - Table 'debus.viagens' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.viagens: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`viagens`' na linha 1
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `viagens_passageiros`
+--
+-- Erro ao ler a estrutura para a tabela debus.viagens_passageiros: #1932 - Table 'debus.viagens_passageiros' doesn't exist in engine
+-- Erro ao ler dados para tabela debus.viagens_passageiros: #1064 - Você tem um erro de sintaxe no seu SQL próximo a 'FROM `debus`.`viagens_passageiros`' na linha 1
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
