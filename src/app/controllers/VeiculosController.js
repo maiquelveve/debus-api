@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import { Op } from 'sequelize';
 import * as yup from 'yup';
 
 import Veiculo from '../models/Veiculo';
@@ -122,7 +123,7 @@ class VeiculosController {
     async buscarVeiculosPorEmpresa(req, res) {
         try {
             const {id_empresa} = req.query
-            const veiculos = await Veiculo.findAll({where:{id_empresa}})//fazer travez so os vaiculos ativos
+            const veiculos = await Veiculo.findAll({where:{id_empresa, ch_ativo: {[Op.eq]: 'S'} }})
             return res.status(200).json(veiculos)
 
         } catch (error) {
