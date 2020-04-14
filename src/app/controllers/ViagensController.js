@@ -8,7 +8,10 @@ class ViagensController {
 
     async cadastrar(req, res) {
         try {
-            return res.status(200).json({ok:true})
+            await Viagem.create(req.body)
+            
+            const retorno = [{success: 1, msg: 'ok'}]
+            return res.status(200).json(retorno)
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
@@ -18,12 +21,3 @@ class ViagensController {
 }
 
 export default new ViagensController();
-
-
-
-/* eh assim que faz para executar uma query na mão
-    import Sequelize from 'sequelize';
-    import dataBaseConfig from '../../config/database';
-    const sequelize = new Sequelize(dataBaseConfig);
-    const viagem =  await sequelize.query("SELECT * FROM viagens", { type: sequelize.QueryTypes.SELECT})
-*/
