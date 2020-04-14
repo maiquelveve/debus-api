@@ -4,6 +4,7 @@ import authConfig from '../../config/authConfig';
 
 class ConfigController {
     async validaToken(req, res) {
+        console.log(req.headers)
         const token = req.headers.auth
 
         if(!token) {

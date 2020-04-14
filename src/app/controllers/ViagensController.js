@@ -5,6 +5,16 @@ class ViagensController {
         const viagem = await Viagem.findAll({include:['veiculo', 'local_referencia_origem', 'local_referencia_destino']});
         res.json(viagem)
     }
+
+    async cadastrar(req, res) {
+        try {
+            return res.status(200).json({ok:true})
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
 }
 
 export default new ViagensController();

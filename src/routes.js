@@ -39,5 +39,6 @@ routes.put('/empresas/:id', EmpresasController.editar);
 routes.put('/empresas/ativar/:id', EmpresasController.ativar);
 routes.put('/empresas/desativar/:id', EmpresasController.desativar);
 routes.get('/viagens', ViagensController.index);
+routes.post('/viagens', ViagensController.cadastrar);
 
 export default routes
