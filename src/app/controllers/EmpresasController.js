@@ -98,7 +98,6 @@ class EmpresasController {
         try {
             const { id_usuario } = req.body
             const {st_nome, st_recefi, ch_ativo} = req.query   
-            console.log(req.query)
 
             let where = {id_usuario}
             if(st_nome.trim() !== '') {
