@@ -11,6 +11,7 @@ class Viagem extends Model {
                 nr_id_local_referencia_origem: Sequelize.INTEGER,
                 nr_id_local_referencia_destino: Sequelize.INTEGER,
                 en_situacao: Sequelize.STRING,
+                vl_valor: Sequelize.FLOAT,
             },
             {
                 sequelize,
