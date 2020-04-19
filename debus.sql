@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 12-Abr-2020 às 02:46
+-- Tempo de geração: 19-Abr-2020 às 23:25
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.1
 
@@ -5810,7 +5810,8 @@ CREATE TABLE `veiculos` (
 --
 
 INSERT INTO `veiculos` (`id`, `st_placa`, `nr_lugares`, `ch_ativo`, `id_empresa`) VALUES
-(1, 'IQY3336', 4, 'S', 1);
+(1, 'IQY3336', 4, 'S', 1),
+(2, 'GUN3271', 40, 'S', 1);
 
 -- --------------------------------------------------------
 
@@ -5822,11 +5823,23 @@ CREATE TABLE `viagens` (
   `id` int(11) NOT NULL,
   `vagas` int(11) DEFAULT NULL,
   `hh_horario` time DEFAULT NULL,
+  `dt_data` date NOT NULL,
+  `vl_valor` float NOT NULL DEFAULT 0,
   `nr_id_local_referencia_origem` int(11) NOT NULL,
   `nr_id_local_referencia_destino` int(11) NOT NULL,
   `id_veiculo` int(11) NOT NULL,
   `en_situacao` enum('confirmada','aguardando confirmação','cancelada') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `viagens`
+--
+
+INSERT INTO `viagens` (`id`, `vagas`, `hh_horario`, `dt_data`, `vl_valor`, `nr_id_local_referencia_origem`, `nr_id_local_referencia_destino`, `id_veiculo`, `en_situacao`) VALUES
+(10, 1, '12:32:00', '0000-00-00', 0, 1, 1, 1, 'aguardando confirmação'),
+(11, 1, '13:54:00', '0000-00-00', 0, 1, 1, 2, 'aguardando confirmação'),
+(12, 3, '15:44:00', '2020-04-20', 0, 1, 1, 1, 'aguardando confirmação'),
+(13, 15, '15:44:00', '2020-05-15', 154.22, 1, 1, 2, 'aguardando confirmação');
 
 -- --------------------------------------------------------
 
@@ -5923,7 +5936,7 @@ ALTER TABLE `viagens_passageiros`
 -- AUTO_INCREMENT de tabela `cidades`
 --
 ALTER TABLE `cidades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5610;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5611;
 
 --
 -- AUTO_INCREMENT de tabela `empresas`
@@ -5965,13 +5978,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `viagens`
 --
 ALTER TABLE `viagens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de tabela `viagens_passageiros`
