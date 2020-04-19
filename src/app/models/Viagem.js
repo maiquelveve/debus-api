@@ -7,6 +7,7 @@ class Viagem extends Model {
             {
                 vagas: Sequelize.INTEGER,
                 hh_horario: Sequelize.TIME,
+                dt_data: Sequelize.STRING,
                 nr_id_local_referencia_origem: Sequelize.INTEGER,
                 nr_id_local_referencia_destino: Sequelize.INTEGER,
                 en_situacao: Sequelize.STRING,
