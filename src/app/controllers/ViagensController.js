@@ -28,13 +28,20 @@ class ViagensController {
             const sequelize = new Sequelize(dataBaseConfig);
             const sql = `SELECT VI.id_veiculo, VI.vagas, VI.id, VI.hh_horario, VI.dt_data, VI.nr_id_local_referencia_origem, VI.nr_id_local_referencia_destino, 
                                 VE.id_empresa,
-                                CD.id as cidade_destino_id
+                                CD.id as cidade_destino_id, ED.id as estado_destino_id, PD.id as pais_destino_id
+                                CD.id as cidade_destino_id, ED.id as estado_destino_id, PD.id as pais_destino_id
 
                         FROM viagens VI 
                             INNER JOIN veiculos VE ON VE.id = VI.id_veiculo
                             INNER JOIN empresas E ON E.id = VE.id_empresa 
-                            INNER JOIN cidades CD ON CD.id = VI.nr_id_local_referencia_destino 
-                            
+                            INNER JOIN locais_referencias LRD ON LRD.id = VI.nr_id_local_referencia_destino
+                            INNER JOIN cidades CD ON CD.id = LRD.id_cidade
+                            INNER JOIN estados ED ON ED.id = CD.id_Estado
+                            INNER JOIN pais PD ON PD.id = ED.id_pais
+                            INNER JOIN locais_referencias LRD ON LRD.id = VI.nr_id_local_referencia_destino
+                            INNER JOIN cidades CD ON CD.id = LRD.id_cidade
+                            INNER JOIN estados ED ON ED.id = CD.id_Estado
+                            INNER JOIN pais PD ON PD.id = ED.id_pais
                             
                          WHERE E.id_usuario = ${id_usuario} AND VI.id = ${id}`
 
