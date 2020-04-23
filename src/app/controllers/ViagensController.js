@@ -41,7 +41,6 @@ class ViagensController {
                             INNER JOIN cidades CD ON CD.id = LRD.id_cidade
                             INNER JOIN estados ED ON ED.id = CD.id_Estado
                             INNER JOIN pais PD ON PD.id = ED.id_pais
-                            
                          WHERE E.id_usuario = ${id_usuario} AND VI.id = ${id}`
 
             const viagem = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT}) 
