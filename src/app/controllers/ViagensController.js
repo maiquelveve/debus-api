@@ -21,6 +21,23 @@ class ViagensController {
         }
     }
 
+    async editar(req, res) {
+        try {
+            const { id } = req.params
+            const viagem = req.body
+
+            await Viagem.update(viagem, {where:{id}})
+
+            const retorno = [{success: 1, msg: 'ok'}]
+            return res.status(200).json(retorno)
+
+        } catch (error) {
+            console.log(error)
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
     async buscarViagem(req, res) {
         try {
             const id_usuario = req.body.id_usuario
