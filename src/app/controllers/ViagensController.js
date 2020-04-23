@@ -26,18 +26,17 @@ class ViagensController {
             const id_usuario = req.body.id_usuario
             const { id } = req.params
             const sequelize = new Sequelize(dataBaseConfig);
-            const sql = `SELECT VI.id_veiculo, VI.vagas, VI.id, VI.hh_horario, VI.dt_data, VI.nr_id_local_referencia_origem, VI.nr_id_local_referencia_destino, 
+            const sql = `SELECT VI.id, VI.id_veiculo, VI.vagas, VI.vl_valor, VI.hh_horario, VI.dt_data, VI.nr_id_local_referencia_origem, VI.nr_id_local_referencia_destino, 
                                 VE.id_empresa,
-                                CD.id as cidade_destino_id, ED.id as estado_destino_id, PD.id as pais_destino_id
-                                CD.id as cidade_destino_id, ED.id as estado_destino_id, PD.id as pais_destino_id
-
+                                CD.id as cidade_destino_id, ED.id as estado_destino_id, PD.id as pais_destino_id,
+                                CO.id as cidade_origem_id, EO.id as estado_origem_id, PO.id as pais_origem_id
                         FROM viagens VI 
                             INNER JOIN veiculos VE ON VE.id = VI.id_veiculo
                             INNER JOIN empresas E ON E.id = VE.id_empresa 
-                            INNER JOIN locais_referencias LRD ON LRD.id = VI.nr_id_local_referencia_destino
-                            INNER JOIN cidades CD ON CD.id = LRD.id_cidade
-                            INNER JOIN estados ED ON ED.id = CD.id_Estado
-                            INNER JOIN pais PD ON PD.id = ED.id_pais
+                            INNER JOIN locais_referencias LRO ON LRO.id = VI.nr_id_local_referencia_origem
+                            INNER JOIN cidades CO ON CO.id = LRO.id_cidade
+                            INNER JOIN estados EO ON EO.id = CO.id_Estado
+                            INNER JOIN pais PO ON PO.id = EO.id_pais
                             INNER JOIN locais_referencias LRD ON LRD.id = VI.nr_id_local_referencia_destino
                             INNER JOIN cidades CD ON CD.id = LRD.id_cidade
                             INNER JOIN estados ED ON ED.id = CD.id_Estado
