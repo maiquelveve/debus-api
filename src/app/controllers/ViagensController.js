@@ -2,7 +2,7 @@ import Viagem from '../models/Viagem';
 import Sequelize from 'sequelize';
 import dataBaseConfig from '../../config/database';
 
-import { validaString, validaNumber } from '../../service/validacoesBasicas'
+import { validaString, validaNumber, validaData, validaHora } from '../../service/validacoesBasicas'
 
 class ViagensController {
     async index(req, res) {
@@ -82,10 +82,21 @@ async function validacao(dados, res) {
                 res.status(400).json(retorno)
                 return 1
             }
+
+            if(!validaData(dados.dt_data)) {
+                retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Data Invalida.'}]
+                res.status(400).json(retorno)
+                return 1
+            } 
+
+            if(!validaHora(dados.hh_horario)) {
+                retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Hora Invalida.'}]
+                res.status(400).json(retorno)
+                return 1
+            } 
             
-            //Validacoes Data, Hora, Interlado entre datas, veiculos com menos lugares
+            //Interlado entre datas, veiculos com menos lugares
             retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Lugares disponiveis menor que o numero de vagas.'}]
-            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Data menor que xx/xx/xxxx.'}]
             res.status(400).json(retorno)
             return 1
         }

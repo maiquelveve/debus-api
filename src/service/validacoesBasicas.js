@@ -1,3 +1,5 @@
+import { parseISO, format } from 'date-fns'
+
 export const validaString = (string, min = 1, max = Infinity) => {
     string = string.trim()
 
@@ -31,6 +33,51 @@ export const validaNumber = (number, min = 0, max = Infinity ) => {
     }
 
     if(number > max) {
+        return false
+    }
+
+    return true
+}
+
+export const validaData = data => {
+    try {
+        data = data.split('-')
+        
+        //Caso o usuario não preencha a data no formato certo com pelo menos as 
+        if(data.length < 3 || data[0].length !== 4) {
+            throw new Error('INCOMPLETA')
+        }
+
+        //Se for uma data invalida 30/02/2020 vai cair no catch
+        const newDate = parseISO(`${data[0]}-${data[1]}-${data[2]}`)
+        format(newDate, "yyyy-MM-dd");
+        return true
+
+    } catch (error) {
+        return false
+    }
+}
+
+export const validaHora = hora => {
+    
+    if(hora.substring(0,1) < 0 || hora.substring(1,2) < 0 || hora.substring(3,4) < 0 || hora.substring(4,5) < 0) {
+        return false
+    }
+
+    /* VALIDAÇÂO DAS HORAS */
+    //Valida 1 digito da HORA
+    if(hora.substring(0,1) > 2) {
+        return false
+    }
+
+    //Valida 2 digito da HORA
+    if(parseInt(hora.substring(0,1)) === 2 && hora.substring(1,2) > 3) {
+        return false
+    }
+
+    /* VALIDAÇÂO DAS MINITOS */
+    //Valida 1 digito da MINUTOS
+    if(hora.substring(3,4) > 5) {
         return false
     }
 
