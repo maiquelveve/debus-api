@@ -24,15 +24,15 @@ class ViagensController {
     async editar(req, res) {
         try {
             const { id } = req.params
-            const viagem = req.body
+            const erros = await validacao(req.body, res)
 
-            await Viagem.update(viagem, {where:{id}})
-
-            const retorno = [{success: 1, msg: 'ok'}]
-            return res.status(200).json(retorno)
-
+            if(erros === 0) {
+                await Viagem.update(req.body, {where:{id}})
+                const retorno = [{success: 1, msg: 'ok'}]
+                return res.status(200).json(retorno)
+            }
+            
         } catch (error) {
-            console.log(error)
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
             return res.status(500).json(retorno)
         }
@@ -67,6 +67,25 @@ class ViagensController {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
             return res.status(500).json(retorno)
         }
+    }
+}
+
+async function validacao(dados, res) {
+    try {
+        let retorno = [{success: 0, msg: 'formError'}]
+
+        if(0 === 0) {
+            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Verifique os dados informados.'}]
+            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Lugares disponiveis menor que o numero de vagas.'}]
+            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Data menor que xx/xx/xxxx.'}]
+            res.status(400).json(retorno)
+            return 1
+        }
+        
+        return 0
+
+    } catch (error) {
+        throw new Error('deu ruim')
     }
 }
 
