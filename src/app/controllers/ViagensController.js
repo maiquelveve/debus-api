@@ -2,6 +2,8 @@ import Viagem from '../models/Viagem';
 import Sequelize from 'sequelize';
 import dataBaseConfig from '../../config/database';
 
+import { validaString, validaNumber } from '../../service/validacoesBasicas'
+
 class ViagensController {
     async index(req, res) {
         const viagem = await Viagem.findAll({include:['veiculo', 'local_referencia_origem', 'local_referencia_destino']});
@@ -75,7 +77,13 @@ async function validacao(dados, res) {
         let retorno = [{success: 0, msg: 'formError'}]
 
         if(0 === 0) {
-            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Verifique os dados informados.'}]
+            if(!validacoesBasicasForm(dados)) {
+                retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Verifique os dados informados.'}]
+                res.status(400).json(retorno)
+                return 1
+            }
+            
+            //Validacoes Data, Hora, Interlado entre datas, veiculos com menos lugares
             retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Lugares disponiveis menor que o numero de vagas.'}]
             retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Data menor que xx/xx/xxxx.'}]
             res.status(400).json(retorno)
@@ -87,6 +95,38 @@ async function validacao(dados, res) {
     } catch (error) {
         throw new Error('deu ruim')
     }
+}
+
+function validacoesBasicasForm(dados) {
+    if(!validaNumber(dados.nr_id_local_referencia_origem, 1)) {
+        return false
+    }
+
+    if(!validaNumber(dados.nr_id_local_referencia_destino, 1)) {
+        return false
+    }
+
+    if(!validaNumber(dados.vl_valor, 0, 9999.99)) {
+        return false
+    }
+
+    if(!validaNumber(dados.vagas, 1)) {
+        return false
+    }
+
+    if(!validaNumber(dados.id_veiculo, 1)) {
+        return false
+    }
+
+    if(!validaString(dados.dt_data, 10, 10)) {
+        return false
+    }
+
+    if(!validaString(dados.hh_horario, 5, 5)) {
+        return false
+    }
+
+    return true
 }
 
 export default new ViagensController();
