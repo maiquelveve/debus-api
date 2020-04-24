@@ -2,20 +2,21 @@ import Viagem from '../models/Viagem';
 import Sequelize from 'sequelize';
 import dataBaseConfig from '../../config/database';
 
+import { format, parseISO, isAfter, add } from 'date-fns'
 import { validaString, validaNumber, validaData, validaHora } from '../../service/validacoesBasicas'
 
 class ViagensController {
-    async index(req, res) {
-        const viagem = await Viagem.findAll({include:['veiculo', 'local_referencia_origem', 'local_referencia_destino']});
-        res.json(viagem)
-    }
 
     async cadastrar(req, res) {
         try {
-            await Viagem.create(req.body)
-            
-            const retorno = [{success: 1, msg: 'ok'}]
-            return res.status(200).json(retorno)
+            const erros = await validacao(req.body, res)
+
+            if(erros === 0) {
+                await Viagem.create(req.body)
+                
+                const retorno = [{success: 1, msg: 'ok'}]
+                return res.status(200).json(retorno)
+            }    
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
@@ -30,6 +31,7 @@ class ViagensController {
 
             if(erros === 0) {
                 await Viagem.update(req.body, {where:{id}})
+                
                 const retorno = [{success: 1, msg: 'ok'}]
                 return res.status(200).json(retorno)
             }
@@ -76,26 +78,31 @@ async function validacao(dados, res) {
     try {
         let retorno = [{success: 0, msg: 'formError'}]
 
-        if(0 === 0) {
-            if(!validacoesBasicasForm(dados)) {
-                retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Verifique os dados informados.'}]
-                res.status(400).json(retorno)
-                return 1
-            }
+        if(!validacoesBasicasForm(dados)) {
+            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Verifique os dados informados.'}]
+            res.status(400).json(retorno)
+            return 1
+        }
 
-            if(!validaData(dados.dt_data)) {
-                retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Data Invalida.'}]
-                res.status(400).json(retorno)
-                return 1
-            } 
+        if(!validaData(dados.dt_data)) {
+            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Data Invalida.'}]
+            res.status(400).json(retorno)
+            return 1
+        } 
 
-            if(!validaHora(dados.hh_horario)) {
-                retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Hora Invalida.'}]
-                res.status(400).json(retorno)
-                return 1
-            } 
-            
-            //Interlado entre datas, veiculos com menos lugares
+        if(!validaHora(dados.hh_horario)) {
+            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Hora Invalida.'}]
+            res.status(400).json(retorno)
+            return 1
+        } 
+
+        if(!verificaLimiteData(dados.dt_data, dados.hh_horario)) {
+            retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. A data esta fora do limite permitido.'}]
+            res.status(400).json(retorno)
+            return 1
+        }
+
+        if(!await verificaVagasDisponivel(dados.vagas, dados.id_veiculo, dados.id_usuario)) {
             retorno = [...retorno, {success: 0, msg: 'Ocorreu um erro. Lugares disponiveis menor que o numero de vagas.'}]
             res.status(400).json(retorno)
             return 1
@@ -104,7 +111,50 @@ async function validacao(dados, res) {
         return 0
 
     } catch (error) {
-        throw new Error('deu ruim')
+        throw new Error('ERROR_SERVER')
+    }
+}
+
+async function verificaVagasDisponivel(vagas, id_veiculo, id_usuario) {
+    try {
+        const sequelize = new Sequelize(dataBaseConfig);
+        const sql = `SELECT V.nr_lugares
+                     FROM veiculos V 
+                        INNER JOIN empresas E ON E.id = V.id_empresa 
+                     WHERE E.id_usuario = ${id_usuario} AND V.ch_ativo = 'S' AND V.id = ${id_veiculo}`
+                     
+        const veiculo = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT}) 
+        
+        if(vagas > veiculo[0].nr_lugares) {
+            return false
+        }
+
+        return true
+
+    } catch (error) {   
+        throw new Error(error)
+    }
+}
+
+function verificaLimiteData(data, horario) {
+    try {
+        data = parseISO(`${data} ${horario}`)
+
+        const dataMinima = add(new Date(), { hours: 2})
+        const dataMax = add(parseISO(format(new Date(),'yyyy-MM-dd')) , {months: 3, hours:23, minutes:59, seconds: 59})
+
+        if(!isAfter(data, dataMinima)) {
+            throw new Error('MENOR')
+         }
+
+        if(isAfter(data, dataMax)) {
+           throw new Error('MAIOR')
+        }
+        
+        return true
+
+    } catch (error) {
+        return false 
     }
 }
 
