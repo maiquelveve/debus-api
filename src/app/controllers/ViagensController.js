@@ -62,7 +62,7 @@ class ViagensController {
             }
             
             const sequelize = new Sequelize(dataBaseConfig);
-            const sql = `SELECT VI.id, VI.dt_data, VE.st_placa, E.st_nome, 
+            const sql = `SELECT VI.id, VI.dt_data, VI.en_situacao, VE.st_placa, E.st_nome, 
                                 CO.st_nome as cidade_origem, EO.ch_sigla as estado_sigla_origem, PO.ch_sigla as pais_sigla_origem,
                                 CD.st_nome as cidade_destino, ED.ch_sigla as estado_sigla_destino, PD.ch_sigla as pais_sigla_destino
                          FROM viagens VI
