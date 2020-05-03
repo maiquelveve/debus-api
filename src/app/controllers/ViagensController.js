@@ -118,6 +118,42 @@ class ViagensController {
             return res.status(500).json(retorno)
         }
     }
+
+    async confirmar(req, res) {
+        try {
+            const { id } = req.params
+            await Viagem.update({ en_situacao: 'confirmada' }, { where:{id} })
+            return res.status(200).json({ok:true})
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
+    async cancelar(req, res) {
+        try {
+            const { id } = req.params
+            await Viagem.update({ en_situacao: 'cancelada' }, { where:{id} })
+            return res.status(200).json({ok:true})
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
+    async reativar(req, res) {
+        try {
+            const { id } = req.params
+            await Viagem.update({ en_situacao: 'aguardando confirmação' }, { where:{id} })
+            return res.status(200).json({ok:true})
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
 }
 
 async function validacao(dados, res) {

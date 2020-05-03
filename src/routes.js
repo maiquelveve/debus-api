@@ -42,5 +42,8 @@ routes.post('/viagens', ViagensController.cadastrar);
 routes.get('/viagens', ViagensController.listar);
 routes.get('/viagens/:id', ViagensController.buscarViagem);
 routes.put('/viagens/:id', ViagensController.editar);
+routes.put('/viagens/confirmar/:id', ViagensController.confirmar);
+routes.put('/viagens/cancelar/:id', ViagensController.cancelar);
+routes.put('/viagens/reativar/:id', ViagensController.reativar);
 
 export default routes
