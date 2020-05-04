@@ -19,11 +19,12 @@ routes.post('/usuarios/login', UsuariosController.login)
 routes.get('/paises', PaisesController.buscarTodosPaises)
 routes.get('/estados', EstadosController.buscarTodosEstadosPorPais)
 routes.get('/cidades', CidadesController.buscarTodasCidadesPorEstado)
-routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
 
 //daqui para baixo somente as rotas de usuarios logados
 routes.use(authMiddleware)
 
+//Esta aqui pq precisa do id_usuario
+routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
 routes.post('/veiculos', VeiculosController.cadastrar);
 routes.get('/veiculos', VeiculosController.listar);
 routes.get('/veiculos/buscarVeiculosPorEmpresa', VeiculosController.buscarVeiculosPorEmpresa)

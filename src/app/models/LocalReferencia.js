@@ -19,7 +19,8 @@ class LocalReferencia extends Model {
     }
 
     static associate(model) {
-        this.belongsTo(model.Cidade, { foreignKey: 'id_cidade', as: 'cidade'})
+        this.belongsTo(model.Cidade, { foreignKey: 'id_cidade', as: 'cidade'}),
+        this.belongsTo(model.Usuario, { foreignKey: 'id_usuario', as: 'usuario'})
     }
 }
 

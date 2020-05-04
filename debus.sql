@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 19-Abr-2020 às 23:25
+-- Tempo de geração: 05-Maio-2020 às 00:53
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.1
 
@@ -5665,7 +5665,7 @@ INSERT INTO `empresas` (`id`, `st_nome`, `st_recefi`, `st_cel`, `ch_ativo`, `id_
 (6, 'lalalalLLLasdLLL', '1234567892151', '2151651', 'S', 1),
 (8, 'olha outro teste ', '555', '12323', 'S', 1),
 (9, 'test fn', '888', '13213', 'N', 1),
-(10, 'OUTRO TESTE FN', '666', '132', 'N', 1),
+(10, 'OUTRO TESTE FN', '666', '132', 'S', 1),
 (11, 'TESTE02 ', '111', '5199995542', 'N', 1),
 (12, 'HDFGH', 'dfghdfg', '5199545454', 'S', 1),
 (13, 'FASFG', 'lghjf', '1111111111', 'S', 1),
@@ -5729,15 +5729,9 @@ INSERT INTO `estados` (`id`, `ch_sigla`, `st_nome`, `id_pais`) VALUES
 CREATE TABLE `locais_referencias` (
   `id` int(11) NOT NULL,
   `st_dsc` varchar(128) DEFAULT NULL,
+  `id_usuario` int(11) NOT NULL,
   `id_cidade` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `locais_referencias`
---
-
-INSERT INTO `locais_referencias` (`id`, `st_dsc`, `id_cidade`) VALUES
-(1, 'Praça do avião', 3929);
 
 -- --------------------------------------------------------
 
@@ -5811,7 +5805,7 @@ CREATE TABLE `veiculos` (
 
 INSERT INTO `veiculos` (`id`, `st_placa`, `nr_lugares`, `ch_ativo`, `id_empresa`) VALUES
 (1, 'IQY3336', 4, 'S', 1),
-(2, 'GUN3271', 40, 'S', 1);
+(2, 'GUN3271', 40, 'N', 1);
 
 -- --------------------------------------------------------
 
@@ -5830,16 +5824,6 @@ CREATE TABLE `viagens` (
   `id_veiculo` int(11) NOT NULL,
   `en_situacao` enum('confirmada','aguardando confirmação','cancelada') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `viagens`
---
-
-INSERT INTO `viagens` (`id`, `vagas`, `hh_horario`, `dt_data`, `vl_valor`, `nr_id_local_referencia_origem`, `nr_id_local_referencia_destino`, `id_veiculo`, `en_situacao`) VALUES
-(10, 1, '12:32:00', '0000-00-00', 0, 1, 1, 1, 'aguardando confirmação'),
-(11, 1, '13:54:00', '0000-00-00', 0, 1, 1, 2, 'aguardando confirmação'),
-(12, 3, '15:44:00', '2020-04-20', 0, 1, 1, 1, 'aguardando confirmação'),
-(13, 15, '15:44:00', '2020-05-15', 154.22, 1, 1, 2, 'aguardando confirmação');
 
 -- --------------------------------------------------------
 
@@ -5883,7 +5867,8 @@ ALTER TABLE `estados`
 --
 ALTER TABLE `locais_referencias`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_cidade` (`id_cidade`);
+  ADD KEY `id_cidade` (`id_cidade`),
+  ADD KEY `fk_usuarios_locais_referencias` (`id_usuario`);
 
 --
 -- Índices para tabela `pais`
@@ -5984,7 +5969,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `viagens`
 --
 ALTER TABLE `viagens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de tabela `viagens_passageiros`
@@ -6018,6 +6003,7 @@ ALTER TABLE `estados`
 -- Limitadores para a tabela `locais_referencias`
 --
 ALTER TABLE `locais_referencias`
+  ADD CONSTRAINT `fk_usuarios_locais_referencias` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`),
   ADD CONSTRAINT `locais_referencias_ibfk_1` FOREIGN KEY (`id_cidade`) REFERENCES `cidades` (`id`);
 
 --
