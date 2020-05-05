@@ -46,7 +46,7 @@ class LocaisReferenciasController {
 
             let where = `WHERE LR.id_usuario = ${id_usuario}`
 
-            if(id_cidade !== 0) {
+            if(id_cidade > 0) {
                 where += ` AND id_cidade = ${id_cidade}`
             }
 
