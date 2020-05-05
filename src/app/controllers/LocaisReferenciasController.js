@@ -21,6 +21,24 @@ class LocaisReferenciasController {
         }
     }
 
+    async editar(req, res) {
+        try {
+            const erros = await validacao(req.body, res);
+            const { id } = req.params
+            const { id_usuario } = req.body
+
+            if(erros === 0) {
+                await LocalReferencia.update(req.body, {where:{id, id_usuario}})
+                const retorno = [{success: 1, msg: 'ok'}]
+                return res.status(200).json(retorno)
+            }
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um eroo. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
     async buscarLocaisReferencias(req, res) {
         try {
             const { id } = req.params

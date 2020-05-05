@@ -27,6 +27,7 @@ routes.use(authMiddleware)
 routes.post('/locaisReferencias', LocaisReferenciasController.cadastrar)
 routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
 routes.get('/locaisReferencias/:id', LocaisReferenciasController.buscarLocaisReferencias)
+routes.put('/locaisReferencias/:id', LocaisReferenciasController.editar)
 
 //Rotas Veiculos
 routes.post('/veiculos', VeiculosController.cadastrar);
