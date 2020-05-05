@@ -25,6 +25,8 @@ routes.use(authMiddleware)
 
 //Esta aqui pq precisa do id_usuario
 routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
+
+routes.post('/locaisReferencias', LocaisReferenciasController.cadastrar)
 routes.post('/veiculos', VeiculosController.cadastrar);
 routes.get('/veiculos', VeiculosController.listar);
 routes.get('/veiculos/buscarVeiculosPorEmpresa', VeiculosController.buscarVeiculosPorEmpresa)
