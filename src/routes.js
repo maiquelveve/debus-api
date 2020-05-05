@@ -26,6 +26,7 @@ routes.use(authMiddleware)
 //Rotas LocaisReferencia - Esta aqui pq precisa do id_usuario
 routes.post('/locaisReferencias', LocaisReferenciasController.cadastrar)
 routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
+routes.get('/locaisReferencias/listar', LocaisReferenciasController.listar)
 routes.get('/locaisReferencias/:id', LocaisReferenciasController.buscarLocaisReferencias)
 routes.put('/locaisReferencias/:id', LocaisReferenciasController.editar)
 
