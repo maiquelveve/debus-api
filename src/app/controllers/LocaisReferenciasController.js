@@ -1,4 +1,6 @@
 import LocalReferencia from '../models/LocalReferencia';
+import Sequelize from 'sequelize';
+import dataBaseConfig from '../../config/database';
 import { validaString, validaNumber } from '../../service/validacoesBasicas';
 
 class LocaisReferenciasController {
@@ -12,6 +14,28 @@ class LocaisReferenciasController {
                 const retorno = [{success: 1, msg: 'ok'}]
                 return res.status(200).json(retorno)
             }
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um eroo. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
+    async buscarLocaisReferencias(req, res) {
+        try {
+            const { id } = req.params
+            const { id_usuario } = req.body
+
+            const sequelize = new Sequelize(dataBaseConfig);
+            const sql = `SELECT LR.id, LR.st_dsc, LR.id_cidade, C.id_estado, E.id_pais 
+                         FROM locais_referencias LR
+                            INNER JOIN cidades C ON C.id = LR.id_cidade
+                            INNER JOIN estados E ON E.id = C.id_Estado
+                            INNER JOIN pais P ON P.id = E.id_pais
+                        WHERE LR.id = ${id} AND LR.id_usuario = ${id_usuario}
+                        `
+            const retorno = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT })
+            return res.status(200).json(retorno)
 
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um eroo. Tente novamente mais tarde.'}]

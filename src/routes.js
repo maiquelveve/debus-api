@@ -20,13 +20,15 @@ routes.get('/paises', PaisesController.buscarTodosPaises)
 routes.get('/estados', EstadosController.buscarTodosEstadosPorPais)
 routes.get('/cidades', CidadesController.buscarTodasCidadesPorEstado)
 
-//daqui para baixo somente as rotas de usuarios logados
+//Daqui para baixo somente as rotas de usuarios logados
 routes.use(authMiddleware)
 
-//Esta aqui pq precisa do id_usuario
-routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
-
+//Rotas LocaisReferencia - Esta aqui pq precisa do id_usuario
 routes.post('/locaisReferencias', LocaisReferenciasController.cadastrar)
+routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
+routes.get('/locaisReferencias/:id', LocaisReferenciasController.buscarLocaisReferencias)
+
+//Rotas Veiculos
 routes.post('/veiculos', VeiculosController.cadastrar);
 routes.get('/veiculos', VeiculosController.listar);
 routes.get('/veiculos/buscarVeiculosPorEmpresa', VeiculosController.buscarVeiculosPorEmpresa)
@@ -34,6 +36,8 @@ routes.get('/veiculos/:id', VeiculosController.buscarVeiculo);
 routes.put('/veiculos/:id', VeiculosController.editar);
 routes.put('/veiculos/ativar/:id', VeiculosController.ativar);
 routes.put('/veiculos/desativar/:id', VeiculosController.desativar);
+
+//Rotas Empresas
 routes.post('/empresas', EmpresasController.cadastrar);
 routes.get('/empresas', EmpresasController.listar);
 routes.get('/empresas/buscarDoUsuario', EmpresasController.buscarEmpresasUsuario)
@@ -41,6 +45,8 @@ routes.get('/empresas/:id', EmpresasController.buscarEmpresa);
 routes.put('/empresas/:id', EmpresasController.editar);
 routes.put('/empresas/ativar/:id', EmpresasController.ativar);
 routes.put('/empresas/desativar/:id', EmpresasController.desativar);
+
+//Rotas Viagens
 routes.post('/viagens', ViagensController.cadastrar);
 routes.get('/viagens', ViagensController.listar);
 routes.get('/viagens/:id', ViagensController.buscarViagem);
