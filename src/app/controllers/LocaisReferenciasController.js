@@ -28,7 +28,7 @@ class LocaisReferenciasController {
             const { id_usuario } = req.body
 
             if(erros === 0) {
-                await LocalReferencia.update(req.body, {where:{id, id_usuario}})
+                await LocalReferencia.update(req.body, {where:{id, id_usuario, ch_ativo: 'S'}})
                 const retorno = [{success: 1, msg: 'ok'}]
                 return res.status(200).json(retorno)
             }
@@ -41,21 +41,29 @@ class LocaisReferenciasController {
 
     async listar(req, res) {
         try {
-            const { id_cidade, st_dsc } = req.query
+            const { id_pais, id_estado, id_cidade, st_dsc } = req.query
             const { id_usuario } = req.body
 
-            let where = `WHERE LR.id_usuario = ${id_usuario}`
+            let where = `WHERE LR.ch_ativo = 'S' AND LR.id_usuario = ${id_usuario}`
+
+            if(id_pais > 0) {
+                where += ` AND E.id_pais = ${id_pais}`
+            }
+
+            if(id_estado > 0) {
+                where += ` AND C.id_Estado = ${id_estado}`
+            }
 
             if(id_cidade > 0) {
-                where += ` AND id_cidade = ${id_cidade}`
+                where += ` AND LR.id_cidade = ${id_cidade}`
             }
 
             if(st_dsc !== '') {
-                where += ` AND st_dsc LIKE '%${st_dsc}%'`
+                where += ` AND LR.st_dsc LIKE '%${st_dsc}%'`
             }
 
             const sequelize = new Sequelize(dataBaseConfig);
-            const sql = `SELECT LR.id, LR.st_dsc, LR.id_cidade, C.id_estado, E.id_pais 
+            const sql = `SELECT LR.id, LR.st_dsc, C.st_nome, E.ch_sigla as ch_sigla_estado, P.st_nome as st_pais
                          FROM locais_referencias LR
                             INNER JOIN cidades C ON C.id = LR.id_cidade
                             INNER JOIN estados E ON E.id = C.id_Estado
@@ -96,7 +104,7 @@ class LocaisReferenciasController {
                             INNER JOIN cidades C ON C.id = LR.id_cidade
                             INNER JOIN estados E ON E.id = C.id_Estado
                             INNER JOIN pais P ON P.id = E.id_pais
-                        WHERE LR.id = ${id} AND LR.id_usuario = ${id_usuario}
+                        WHERE LR.id = ${id} AND LR.id_usuario = ${id_usuario} AND LR.ch_ativo = 'S'
                         `
             const retorno = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT })
             return res.status(200).json(retorno)
@@ -111,7 +119,7 @@ class LocaisReferenciasController {
         try {
             const {id_cidade} = req.query
             const {id_usuario} = req.body
-            const locaisReferencias = await LocalReferencia.findAll({where:{id_cidade, id_usuario}})
+            const locaisReferencias = await LocalReferencia.findAll({where:{id_cidade, id_usuario, ch_ativo: 'S' }})
 
             return res.status(200).json(locaisReferencias)
 
