@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05-Maio-2020 às 00:53
--- Versão do servidor: 10.4.11-MariaDB
--- versão do PHP: 7.4.1
+-- Generation Time: 07-Maio-2020 às 14:33
+-- Versão do servidor: 10.1.30-MariaDB
+-- PHP Version: 7.2.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `debus`
+-- Database: `debus`
 --
 
 -- --------------------------------------------------------
@@ -5730,8 +5730,26 @@ CREATE TABLE `locais_referencias` (
   `id` int(11) NOT NULL,
   `st_dsc` varchar(128) DEFAULT NULL,
   `id_usuario` int(11) NOT NULL,
-  `id_cidade` int(11) NOT NULL
+  `id_cidade` int(11) NOT NULL,
+  `ch_ativo` char(1) NOT NULL DEFAULT 'S'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `locais_referencias`
+--
+
+INSERT INTO `locais_referencias` (`id`, `st_dsc`, `id_usuario`, `id_cidade`, `ch_ativo`) VALUES
+(2, 'Praça do avião', 1, 3929, 'N'),
+(3, 'DAER BORGES', 1, 4174, 'N'),
+(4, 'lal', 1, 3925, 'S'),
+(5, 'kak', 1, 3851, 'S'),
+(6, 'sda', 1, 106, 'N'),
+(7, 'sdf', 1, 225, 'S'),
+(8, 'as', 1, 104, 'S'),
+(9, 'as', 1, 105, 'S'),
+(10, 'asdasd', 1, 225, 'S'),
+(11, 'meu local diferente e secreto', 2, 3929, 'S'),
+(12, 'DAER BORGES', 1, 4174, 'N');
 
 -- --------------------------------------------------------
 
@@ -5783,7 +5801,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `st_nome`, `st_email`, `st_senha`) VALUES
-(1, 'Maiquel Leites', 'maiquel@gmail.com', '$2a$08$2VfVOdiu88.N8hWEp/hrFeLrYQ/ZkxhHqK8/Pk3KMnVf0EOsIdR12');
+(1, 'Maiquel Leites', 'maiquel@gmail.com', '$2a$08$2VfVOdiu88.N8hWEp/hrFeLrYQ/ZkxhHqK8/Pk3KMnVf0EOsIdR12'),
+(2, 'fran leites', 'fran@gmail.com', '$2a$08$XScl15KCxqA0P1m0RZKrw.uIZ8a5gxFhBmIW2JnOqzVhFvhG1dkZ.');
 
 -- --------------------------------------------------------
 
@@ -5818,12 +5837,19 @@ CREATE TABLE `viagens` (
   `vagas` int(11) DEFAULT NULL,
   `hh_horario` time DEFAULT NULL,
   `dt_data` date NOT NULL,
-  `vl_valor` float NOT NULL DEFAULT 0,
+  `vl_valor` float NOT NULL DEFAULT '0',
   `nr_id_local_referencia_origem` int(11) NOT NULL,
   `nr_id_local_referencia_destino` int(11) NOT NULL,
   `id_veiculo` int(11) NOT NULL,
   `en_situacao` enum('confirmada','aguardando confirmação','cancelada') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `viagens`
+--
+
+INSERT INTO `viagens` (`id`, `vagas`, `hh_horario`, `dt_data`, `vl_valor`, `nr_id_local_referencia_origem`, `nr_id_local_referencia_destino`, `id_veiculo`, `en_situacao`) VALUES
+(15, 4, '15:44:00', '2020-05-15', 15, 2, 12, 1, 'aguardando confirmação');
 
 -- --------------------------------------------------------
 
@@ -5838,32 +5864,32 @@ CREATE TABLE `viagens_passageiros` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices para tabela `cidades`
+-- Indexes for table `cidades`
 --
 ALTER TABLE `cidades`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_Estado` (`id_Estado`);
 
 --
--- Índices para tabela `empresas`
+-- Indexes for table `empresas`
 --
 ALTER TABLE `empresas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Índices para tabela `estados`
+-- Indexes for table `estados`
 --
 ALTER TABLE `estados`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pais` (`id_pais`);
 
 --
--- Índices para tabela `locais_referencias`
+-- Indexes for table `locais_referencias`
 --
 ALTER TABLE `locais_referencias`
   ADD PRIMARY KEY (`id`),
@@ -5871,33 +5897,33 @@ ALTER TABLE `locais_referencias`
   ADD KEY `fk_usuarios_locais_referencias` (`id_usuario`);
 
 --
--- Índices para tabela `pais`
+-- Indexes for table `pais`
 --
 ALTER TABLE `pais`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `passageiros`
+-- Indexes for table `passageiros`
 --
 ALTER TABLE `passageiros`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Índices para tabela `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `veiculos`
+-- Indexes for table `veiculos`
 --
 ALTER TABLE `veiculos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_empresa` (`id_empresa`);
 
 --
--- Índices para tabela `viagens`
+-- Indexes for table `viagens`
 --
 ALTER TABLE `viagens`
   ADD PRIMARY KEY (`id`),
@@ -5906,7 +5932,7 @@ ALTER TABLE `viagens`
   ADD KEY `id_veiculo` (`id_veiculo`);
 
 --
--- Índices para tabela `viagens_passageiros`
+-- Indexes for table `viagens_passageiros`
 --
 ALTER TABLE `viagens_passageiros`
   ADD PRIMARY KEY (`id`),
@@ -5914,71 +5940,71 @@ ALTER TABLE `viagens_passageiros`
   ADD KEY `id_passageiro` (`id_passageiro`);
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `cidades`
+-- AUTO_INCREMENT for table `cidades`
 --
 ALTER TABLE `cidades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5611;
 
 --
--- AUTO_INCREMENT de tabela `empresas`
+-- AUTO_INCREMENT for table `empresas`
 --
 ALTER TABLE `empresas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT de tabela `estados`
+-- AUTO_INCREMENT for table `estados`
 --
 ALTER TABLE `estados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT de tabela `locais_referencias`
+-- AUTO_INCREMENT for table `locais_referencias`
 --
 ALTER TABLE `locais_referencias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT de tabela `pais`
+-- AUTO_INCREMENT for table `pais`
 --
 ALTER TABLE `pais`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de tabela `passageiros`
+-- AUTO_INCREMENT for table `passageiros`
 --
 ALTER TABLE `passageiros`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de tabela `veiculos`
+-- AUTO_INCREMENT for table `veiculos`
 --
 ALTER TABLE `veiculos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de tabela `viagens`
+-- AUTO_INCREMENT for table `viagens`
 --
 ALTER TABLE `viagens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT de tabela `viagens_passageiros`
+-- AUTO_INCREMENT for table `viagens_passageiros`
 --
 ALTER TABLE `viagens_passageiros`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Restrições para despejos de tabelas
+-- Constraints for dumped tables
 --
 
 --
