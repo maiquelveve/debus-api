@@ -5,7 +5,8 @@ class LocalReferencia extends Model {
     static init(sequelize) {
         super.init(
             {
-                st_dsc: Sequelize.STRING
+                st_dsc: Sequelize.STRING,
+                ch_ativo: Sequelize.STRING
             }, 
             {
                 sequelize,

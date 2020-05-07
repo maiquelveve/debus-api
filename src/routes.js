@@ -29,6 +29,7 @@ routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferen
 routes.get('/locaisReferencias/listar', LocaisReferenciasController.listar)
 routes.get('/locaisReferencias/:id', LocaisReferenciasController.buscarLocaisReferencias)
 routes.put('/locaisReferencias/:id', LocaisReferenciasController.editar)
+routes.put('/locaisReferencias/cancelar/:id', LocaisReferenciasController.cancelar)
 
 //Rotas Veiculos
 routes.post('/veiculos', VeiculosController.cadastrar);

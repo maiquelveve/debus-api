@@ -62,13 +62,25 @@ class LocaisReferenciasController {
                             INNER JOIN pais P ON P.id = E.id_pais
                         ${where}
                         `
-            console.log(sql)
-
             const retorno = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT })
             return res.status(200).json(retorno)
 
         } catch (error) {
-            const retorno = [{success: 0, msg: 'Ocorreu um eroo. Tente novamente mais tarde.'}]
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
+    async cancelar(req, res) {
+        try {
+            const { id } = req.params
+            const {id_usuario } = req.body
+
+            await LocalReferencia.update({ ch_ativo: 'N' }, { where:{id, id_usuario} })
+            return res.status(200).json({ok:true})
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
             return res.status(500).json(retorno)
         }
     }
@@ -90,7 +102,7 @@ class LocaisReferenciasController {
             return res.status(200).json(retorno)
 
         } catch (error) {
-            const retorno = [{success: 0, msg: 'Ocorreu um eroo. Tente novamente mais tarde.'}]
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
             return res.status(500).json(retorno)
         }
     }
