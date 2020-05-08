@@ -88,6 +88,34 @@ class ViagensController {
         }
     }
 
+    async buscarViagensHome(req, res) {
+        try {
+            const sequelize = new Sequelize(dataBaseConfig);
+            const sql = `SELECT VI.id, VI.dt_data, VI.en_situacao, VE.st_placa, E.st_nome, 
+                                CO.st_nome as cidade_origem, EO.ch_sigla as estado_sigla_origem, PO.ch_sigla as pais_sigla_origem,
+                                CD.st_nome as cidade_destino, ED.ch_sigla as estado_sigla_destino, PD.ch_sigla as pais_sigla_destino
+                         FROM viagens VI
+                            INNER JOIN veiculos VE ON VE.id = VI.id_veiculo
+                            INNER JOIN empresas E ON E.id = VE.id_empresa
+                            INNER JOIN locais_referencias LRO ON LRO.id = VI.nr_id_local_referencia_origem
+                            INNER JOIN cidades CO ON CO.id = LRO.id_cidade
+                            INNER JOIN estados EO ON EO.id = CO.id_Estado
+                            INNER JOIN pais PO ON PO.id = EO.id_pais
+                            INNER JOIN locais_referencias LRD ON LRD.id = VI.nr_id_local_referencia_destino
+                            INNER JOIN cidades CD ON CD.id = LRD.id_cidade
+                            INNER JOIN estados ED ON ED.id = CD.id_Estado
+                            INNER JOIN pais PD ON PD.id = ED.id_pais
+                        WHERE VI.en_situacao = 'confirmada' OR VI.en_situacao = 'aguardando confirmação'
+                        `
+            const retorno = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT })
+            return res.status(200).json(retorno)
+             
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)  
+        }
+    }
+
     async buscarViagem(req, res) {
         try {
             const id_usuario = req.body.id_usuario

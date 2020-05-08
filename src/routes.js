@@ -19,6 +19,7 @@ routes.post('/usuarios/login', UsuariosController.login)
 routes.get('/paises', PaisesController.buscarTodosPaises)
 routes.get('/estados', EstadosController.buscarTodosEstadosPorPais)
 routes.get('/cidades', CidadesController.buscarTodasCidadesPorEstado)
+routes.get('/viagens/buscarViagensHome', ViagensController.buscarViagensHome);
 
 //Daqui para baixo somente as rotas de usuarios logados
 routes.use(authMiddleware)
