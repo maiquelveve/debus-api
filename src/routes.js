@@ -11,7 +11,13 @@ import EstadosController from './app/controllers/EstadosController';
 import CidadesController from './app/controllers/CidadesController';
 import LocaisReferenciasController from './app/controllers/LocaisReferenciasController';
 
+//Controller de exemplo de materialUI
+import ExemploMaterialUiController from './app/controllers/ExemploMaterialUiController';
+
 const routes = new Router()
+
+//Rota para exemplo de materialUI
+routes.post('/exemploMaterialUi', ExemploMaterialUiController.exemploMaterialUi)
 
 routes.post('/config/validaToken', ConfigController.validaToken)
 routes.post('/usuarios/cadastrar', UsuariosController.cadastrar)
