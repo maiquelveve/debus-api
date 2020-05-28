@@ -13,15 +13,35 @@ class PassageirosController {
             const {id_viagem} = req.query
             const { st_nome, st_cpf, id_usuario } = req.body
 
-            const novoPassageiro = await Passageiro.create({st_nome, st_cpf, id_usuario}, { transaction })
+            const novoPassageiro = await Passageiro.create({st_nome, st_cpf, id_usuario}, { transaction } )
             await ViagemPassageiro.create( {id_viagem, id_passageiro: novoPassageiro.id}, { transaction } )
 
-            transaction.commit();
-
+            await transaction.commit();
             return res.status(200).json({success: 1, msg: 'ok'})
             
         } catch (error) {
-            transaction.rollback();
+            await transaction.rollback();
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
+    async delete(req, res) {
+        const sequelize = new Sequelize(dataBaseConfig);
+        const transaction = await sequelize.transaction()
+
+        try {
+            const { id_usuario } = req.body
+            const { id } = req.params 
+
+            await ViagemPassageiro.destroy({where: { id_passageiro: id }, transaction })
+            await Passageiro.destroy({where: { id, id_usuario },  transaction })
+
+            await transaction.commit();
+            return res.status(200).json({success: 1, msg: 'Ok'})
+            
+        } catch (error) {
+            await transaction.rollback();
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
             return res.status(500).json(retorno)
         }
