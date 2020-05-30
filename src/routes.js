@@ -70,6 +70,7 @@ routes.put('/viagens/reativar/:id', ViagensController.reativar);
 //Rotas Passageiros
 routes.post('/passageiros', PassageirosController.cadastrar);
 routes.get('/passageiros', PassageirosController.buscarPassageirosPorViagem);
+routes.put('/passageiros/:id', PassageirosController.editar);
 routes.delete('/passageiros/:id', PassageirosController.delete);
 
 export default routes

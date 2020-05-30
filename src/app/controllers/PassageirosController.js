@@ -26,6 +26,20 @@ class PassageirosController {
         }
     }
 
+    async editar(req, res) {
+        try {
+            const {st_nome, st_cpf } = req.body
+            const { id } = req.params
+            
+            await Passageiro.update({st_nome, st_cpf}, { where: { id } })
+            return res.status(200).json({success: 1, msg: 'ok'})
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
     async delete(req, res) {
         const sequelize = new Sequelize(dataBaseConfig);
         const transaction = await sequelize.transaction()
