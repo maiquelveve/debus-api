@@ -3,17 +3,27 @@ import Passageiro from '../models/Passageiro';
 import ViagemPassageiro from '../models/ViagemPassageiro';
 import dataBaseConfig from '../../config/database';
 
+import * as yup from 'yup';
+import validacaoDefinicao from '../../config/validacaoDefinicao';
+
+import { ajustarCpf } from '../../service/ajustarDados'
+
 class PassageirosController {
-    
+
     async cadastrar(req, res) {
         const sequelize = new Sequelize(dataBaseConfig);
         const transaction = await sequelize.transaction()
 
         try {
             const {id_viagem} = req.query
-            const { st_nome, st_cpf, id_usuario } = req.body
+            const passageiro = ajustaPassageiroParaBanco(req.body)
 
-            const novoPassageiro = await Passageiro.create({st_nome, st_cpf, id_usuario}, { transaction } )
+            const errors = await validaPassageiro(passageiro)
+            if(errors[0].success === 0) {
+                return res.status(500).json(errors)  
+            }
+
+            const novoPassageiro = await Passageiro.create(passageiro, { transaction } )
             await ViagemPassageiro.create( {id_viagem, id_passageiro: novoPassageiro.id}, { transaction } )
 
             await transaction.commit();
@@ -28,10 +38,15 @@ class PassageirosController {
 
     async editar(req, res) {
         try {
-            const {st_nome, st_cpf } = req.body
             const { id } = req.params
-            
-            await Passageiro.update({st_nome, st_cpf}, { where: { id } })
+            const passageiro = ajustaPassageiroParaBanco(req.body)
+
+            const errors = await validaPassageiro(passageiro)
+            if(errors[0].success === 0) {
+                return res.status(500).json(errors)  
+            }
+
+            await Passageiro.update(passageiro, { where: { id } })
             return res.status(200).json({success: 1, msg: 'ok'})
 
         } catch (error) {
@@ -81,6 +96,50 @@ class PassageirosController {
             return res.status(500).json(retorno)
         }
     }
+}
+
+async function validaPassageiro(passageiro) {
+    //Validaçõe dos Campos Inicio
+    yup.setLocale(validacaoDefinicao)
+    const schemaValidate = yup.object().shape({
+        st_nome: yup
+            .string()
+            .min(2)
+            .max(100)
+            .required(),
+
+        st_cpf: yup
+            .string()
+            .min(11)
+            .max(11)
+            .required(),
+            
+        id_usuario: yup
+            .number()
+            .moreThan(0)
+            .required(),
+    })
+    
+    const erros = await schemaValidate.validate(passageiro, { abortEarly: false }).then( () => false ).catch( erros => {return true})
+    
+    if(erros === true) {
+        const retorno = [{success: 0, msg: 'Ocorreu um erro. Verifique os dados informados!'}]
+        return retorno
+    }                            
+    //Validaçõe dos Campos FINAL
+    
+    //Não houve nenhum erro
+    const retorno = [{success: 1, msg: 'ok'}]                
+    return retorno
+}
+
+function ajustaPassageiroParaBanco(passageiro) {
+    const st_nome = passageiro.st_nome
+    const st_cpf = ajustarCpf(passageiro.st_cpf)
+    const id_usuario = passageiro.id_usuario
+    
+    const newPassageiro = { st_nome, st_cpf, id_usuario }
+    return newPassageiro
 }
 
 export default new PassageirosController();
