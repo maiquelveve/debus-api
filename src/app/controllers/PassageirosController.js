@@ -23,6 +23,11 @@ class PassageirosController {
                 return res.status(400).json(errors)  
             }
 
+            const cpfPassageiro = await buscaCpfJaCadastradoNaViagem(passageiro)
+            if(cpfPassageiro.length > 0) {
+                return res.status(400).json([{success: 0, msg: 'CPF já cadastrado para esta viagem.'}])  
+            }
+
             const novoPassageiro = await Passageiro.create(passageiro, { transaction } )
             await ViagemPassageiro.create( {id_viagem, id_passageiro: novoPassageiro.id}, { transaction } )
 
@@ -44,6 +49,15 @@ class PassageirosController {
             const errors = await validaPassageiro(passageiro)
             if(errors[0].success === 0) {
                 return res.status(400).json(errors)  
+            }
+
+            const cpfPassageiro = await buscaCpfJaCadastradoNaViagem(passageiro)
+            if(cpfPassageiro.length > 0) {
+                const passageiroAtual = await Passageiro.findByPk(id)
+                
+                if(passageiroAtual.st_cpf !== cpfPassageiro[0].st_cpf) {
+                    return res.status(400).json([{success: 0, msg: 'CPF já cadastrado para esta viagem.'}])  
+                }
             }
 
             await Passageiro.update(passageiro, { where: { id } })
@@ -133,12 +147,29 @@ async function validaPassageiro(passageiro) {
     return retorno
 }
 
+async function buscaCpfJaCadastradoNaViagem(passageiro) {
+    try {
+        const sql = `SELECT P.st_cpf
+                        FROM viagens_passageiros VP
+                            INNER JOIN passageiros P ON P.id = VP.id_passageiro
+                        WHERE P.st_cpf = '${passageiro.st_cpf}' AND VP.id_viagem = ${passageiro.id_viagem}
+                    `
+        const sequelize = new Sequelize(dataBaseConfig);            
+        return await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT})               
+        
+    } catch (error) {
+        const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+        return res.status(500).json(retorno)
+    }
+}
+
 function ajustaPassageiroParaBanco(passageiro) {
     const st_nome = passageiro.st_nome
     const st_cpf = ajustarCpf(passageiro.st_cpf)
     const id_usuario = passageiro.id_usuario
+    const id_viagem = passageiro.id_viagem
     
-    const newPassageiro = { st_nome, st_cpf, id_usuario }
+    const newPassageiro = { st_nome, st_cpf, id_usuario, id_viagem }
     return newPassageiro
 }
 
