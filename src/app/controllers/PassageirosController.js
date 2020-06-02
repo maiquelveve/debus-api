@@ -6,7 +6,8 @@ import dataBaseConfig from '../../config/database';
 import * as yup from 'yup';
 import validacaoDefinicao from '../../config/validacaoDefinicao';
 
-import { ajustarCpf } from '../../service/ajustarDados'
+import { ajustarCpf } from '../../service/ajustarDados';
+import { validadorCpf } from '../../service/validadorCpf';
 
 class PassageirosController {
 
@@ -139,7 +140,11 @@ async function validaPassageiro(passageiro) {
     if(erros === true) {
         const retorno = [{success: 0, msg: 'Ocorreu um erro. Verifique os dados informados!'}]
         return retorno
-    }                            
+    }  
+    
+    if(!validadorCpf(passageiro.st_cpf)) {
+        return [{success: 0, msg: 'Ocorreu um erro. Verifique os dados informados!'}]
+    }
     //Validaçõe dos Campos FINAL
     
     //Não houve nenhum erro
