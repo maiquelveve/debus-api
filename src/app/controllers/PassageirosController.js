@@ -20,7 +20,7 @@ class PassageirosController {
 
             const errors = await validaPassageiro(passageiro)
             if(errors[0].success === 0) {
-                return res.status(500).json(errors)  
+                return res.status(400).json(errors)  
             }
 
             const novoPassageiro = await Passageiro.create(passageiro, { transaction } )
@@ -43,7 +43,7 @@ class PassageirosController {
 
             const errors = await validaPassageiro(passageiro)
             if(errors[0].success === 0) {
-                return res.status(500).json(errors)  
+                return res.status(400).json(errors)  
             }
 
             await Passageiro.update(passageiro, { where: { id } })
