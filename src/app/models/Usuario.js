@@ -7,7 +7,8 @@ class Usuario extends Model {
             {
                 st_nome: Sequelize.STRING,
                 st_email: Sequelize.STRING,
-                st_senha: Sequelize.STRING
+                st_senha: Sequelize.STRING,
+                ch_perfil: Sequelize.STRING
             },
             {
                 sequelize,

@@ -31,6 +31,9 @@ routes.get('/viagens/buscarViagensHome', ViagensController.buscarViagensHome);
 //Daqui para baixo somente as rotas de usuarios logados
 routes.use(authMiddleware)
 
+//Rotas para buscar o perfil de acesso do usuario logado, para libera ou não acesso a uma página
+routes.post('/buscarPerfilAcessoUsuario', ConfigController.busacarPerfilAcessoUsuario)
+
 //Rotas LocaisReferencia - Esta aqui pq precisa do id_usuario
 routes.post('/locaisReferencias', LocaisReferenciasController.cadastrar)
 routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)
