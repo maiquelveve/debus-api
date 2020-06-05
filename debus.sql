@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.7
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 07-Maio-2020 às 14:33
--- Versão do servidor: 10.1.30-MariaDB
--- PHP Version: 7.2.2
+-- Tempo de geração: 05-Jun-2020 às 02:13
+-- Versão do servidor: 10.4.11-MariaDB
+-- versão do PHP: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `debus`
+-- Banco de dados: `debus`
 --
 
 -- --------------------------------------------------------
@@ -5739,7 +5739,7 @@ CREATE TABLE `locais_referencias` (
 --
 
 INSERT INTO `locais_referencias` (`id`, `st_dsc`, `id_usuario`, `id_cidade`, `ch_ativo`) VALUES
-(2, 'Praça do avião', 1, 3929, 'N'),
+(2, 'Praça do avião', 1, 3929, 'S'),
 (3, 'DAER BORGES', 1, 4174, 'N'),
 (4, 'lal', 1, 3925, 'S'),
 (5, 'kak', 1, 3851, 'S'),
@@ -5749,7 +5749,7 @@ INSERT INTO `locais_referencias` (`id`, `st_dsc`, `id_usuario`, `id_cidade`, `ch
 (9, 'as', 1, 105, 'S'),
 (10, 'asdasd', 1, 225, 'S'),
 (11, 'meu local diferente e secreto', 2, 3929, 'S'),
-(12, 'DAER BORGES', 1, 4174, 'N');
+(12, 'DAER BORGES', 1, 4174, 'S');
 
 -- --------------------------------------------------------
 
@@ -5783,6 +5783,15 @@ CREATE TABLE `passageiros` (
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Extraindo dados da tabela `passageiros`
+--
+
+INSERT INTO `passageiros` (`id`, `st_nome`, `st_cpf`, `id_usuario`) VALUES
+(36, 'maiquel', '01875381074', 1),
+(37, 'maiquel', '92425212051', 1),
+(38, 'Maiquel Leites', '01875381074', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -5793,16 +5802,17 @@ CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
   `st_nome` varchar(100) NOT NULL,
   `st_email` varchar(100) NOT NULL,
-  `st_senha` char(128) NOT NULL
+  `st_senha` char(128) NOT NULL,
+  `ch_perfil` char(1) NOT NULL DEFAULT 'C'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `st_nome`, `st_email`, `st_senha`) VALUES
-(1, 'Maiquel Leites', 'maiquel@gmail.com', '$2a$08$2VfVOdiu88.N8hWEp/hrFeLrYQ/ZkxhHqK8/Pk3KMnVf0EOsIdR12'),
-(2, 'fran leites', 'fran@gmail.com', '$2a$08$XScl15KCxqA0P1m0RZKrw.uIZ8a5gxFhBmIW2JnOqzVhFvhG1dkZ.');
+INSERT INTO `usuarios` (`id`, `st_nome`, `st_email`, `st_senha`, `ch_perfil`) VALUES
+(1, 'Maiquel Leites', 'maiquel@gmail.com', '$2a$08$2VfVOdiu88.N8hWEp/hrFeLrYQ/ZkxhHqK8/Pk3KMnVf0EOsIdR12', 'C'),
+(2, 'fran leites', 'fran@gmail.com', '$2a$08$XScl15KCxqA0P1m0RZKrw.uIZ8a5gxFhBmIW2JnOqzVhFvhG1dkZ.', 'C');
 
 -- --------------------------------------------------------
 
@@ -5824,7 +5834,7 @@ CREATE TABLE `veiculos` (
 
 INSERT INTO `veiculos` (`id`, `st_placa`, `nr_lugares`, `ch_ativo`, `id_empresa`) VALUES
 (1, 'IQY3336', 4, 'S', 1),
-(2, 'GUN3271', 40, 'N', 1);
+(2, 'GUN3271', 40, 'S', 1);
 
 -- --------------------------------------------------------
 
@@ -5837,11 +5847,11 @@ CREATE TABLE `viagens` (
   `vagas` int(11) DEFAULT NULL,
   `hh_horario` time DEFAULT NULL,
   `dt_data` date NOT NULL,
-  `vl_valor` float NOT NULL DEFAULT '0',
+  `vl_valor` float NOT NULL DEFAULT 0,
   `nr_id_local_referencia_origem` int(11) NOT NULL,
   `nr_id_local_referencia_destino` int(11) NOT NULL,
   `id_veiculo` int(11) NOT NULL,
-  `en_situacao` enum('confirmada','aguardando confirmação','cancelada') DEFAULT NULL
+  `en_situacao` enum('confirmada','aguardando confirmação','cancelada','encerrada') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -5849,7 +5859,9 @@ CREATE TABLE `viagens` (
 --
 
 INSERT INTO `viagens` (`id`, `vagas`, `hh_horario`, `dt_data`, `vl_valor`, `nr_id_local_referencia_origem`, `nr_id_local_referencia_destino`, `id_veiculo`, `en_situacao`) VALUES
-(15, 4, '15:44:00', '2020-05-15', 15, 2, 12, 1, 'aguardando confirmação');
+(15, 4, '15:44:00', '2020-05-15', 15, 2, 12, 1, 'aguardando confirmação'),
+(16, 2, '15:22:00', '2020-06-11', 0, 12, 2, 1, 'aguardando confirmação'),
+(17, 1, '12:33:00', '2020-06-20', 52, 12, 2, 1, 'aguardando confirmação');
 
 -- --------------------------------------------------------
 
@@ -5864,32 +5876,41 @@ CREATE TABLE `viagens_passageiros` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Indexes for dumped tables
+-- Extraindo dados da tabela `viagens_passageiros`
+--
+
+INSERT INTO `viagens_passageiros` (`id`, `id_viagem`, `id_passageiro`) VALUES
+(36, 16, 36),
+(37, 16, 37),
+(38, 15, 38);
+
+--
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `cidades`
+-- Índices para tabela `cidades`
 --
 ALTER TABLE `cidades`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_Estado` (`id_Estado`);
 
 --
--- Indexes for table `empresas`
+-- Índices para tabela `empresas`
 --
 ALTER TABLE `empresas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Indexes for table `estados`
+-- Índices para tabela `estados`
 --
 ALTER TABLE `estados`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_pais` (`id_pais`);
 
 --
--- Indexes for table `locais_referencias`
+-- Índices para tabela `locais_referencias`
 --
 ALTER TABLE `locais_referencias`
   ADD PRIMARY KEY (`id`),
@@ -5897,33 +5918,33 @@ ALTER TABLE `locais_referencias`
   ADD KEY `fk_usuarios_locais_referencias` (`id_usuario`);
 
 --
--- Indexes for table `pais`
+-- Índices para tabela `pais`
 --
 ALTER TABLE `pais`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `passageiros`
+-- Índices para tabela `passageiros`
 --
 ALTER TABLE `passageiros`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Indexes for table `usuarios`
+-- Índices para tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `veiculos`
+-- Índices para tabela `veiculos`
 --
 ALTER TABLE `veiculos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_empresa` (`id_empresa`);
 
 --
--- Indexes for table `viagens`
+-- Índices para tabela `viagens`
 --
 ALTER TABLE `viagens`
   ADD PRIMARY KEY (`id`),
@@ -5932,7 +5953,7 @@ ALTER TABLE `viagens`
   ADD KEY `id_veiculo` (`id_veiculo`);
 
 --
--- Indexes for table `viagens_passageiros`
+-- Índices para tabela `viagens_passageiros`
 --
 ALTER TABLE `viagens_passageiros`
   ADD PRIMARY KEY (`id`),
@@ -5940,71 +5961,71 @@ ALTER TABLE `viagens_passageiros`
   ADD KEY `id_passageiro` (`id_passageiro`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `cidades`
+-- AUTO_INCREMENT de tabela `cidades`
 --
 ALTER TABLE `cidades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5611;
 
 --
--- AUTO_INCREMENT for table `empresas`
+-- AUTO_INCREMENT de tabela `empresas`
 --
 ALTER TABLE `empresas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `estados`
+-- AUTO_INCREMENT de tabela `estados`
 --
 ALTER TABLE `estados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT for table `locais_referencias`
+-- AUTO_INCREMENT de tabela `locais_referencias`
 --
 ALTER TABLE `locais_referencias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `pais`
+-- AUTO_INCREMENT de tabela `pais`
 --
 ALTER TABLE `pais`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `passageiros`
+-- AUTO_INCREMENT de tabela `passageiros`
 --
 ALTER TABLE `passageiros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `veiculos`
+-- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `viagens`
+-- AUTO_INCREMENT de tabela `viagens`
 --
 ALTER TABLE `viagens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `viagens_passageiros`
+-- AUTO_INCREMENT de tabela `viagens_passageiros`
 --
 ALTER TABLE `viagens_passageiros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
--- Constraints for dumped tables
+-- Restrições para despejos de tabelas
 --
 
 --
