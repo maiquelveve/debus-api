@@ -63,6 +63,7 @@ routes.put('/empresas/desativar/:id', EmpresasController.desativar);
 //Rotas Viagens
 routes.post('/viagens', ViagensController.cadastrar);
 routes.get('/viagens', ViagensController.listar);
+routes.get('/viagens/minhas_viagens', ViagensController.minhasViagens);
 routes.get('/viagens/:id', ViagensController.buscarViagem);
 routes.get('/viagens/reservar/:id', ViagensController.buscarViagensReservar)
 routes.put('/viagens/:id', ViagensController.editar);
