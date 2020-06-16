@@ -11,6 +11,7 @@ import EstadosController from './app/controllers/EstadosController';
 import CidadesController from './app/controllers/CidadesController';
 import LocaisReferenciasController from './app/controllers/LocaisReferenciasController';
 import PassageirosController from './app/controllers/PassageirosController';
+import ViagensPassageirosController from './app/controllers/ViagensPassageirosController';
 
 //Controller de exemplo de materialUI
 import ExemploMaterialUiController from './app/controllers/ExemploMaterialUiController';
@@ -77,5 +78,8 @@ routes.post('/passageiros', PassageirosController.cadastrar);
 routes.get('/passageiros', PassageirosController.buscarPassageirosPorViagem);
 routes.put('/passageiros/:id', PassageirosController.editar);
 routes.delete('/passageiros/:id', PassageirosController.delete);
+
+//Rotas Viagens_Passageiros
+routes.delete('/viagens_passageiros', ViagensPassageirosController.deletar)
 
 export default routes
