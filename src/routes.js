@@ -28,6 +28,7 @@ routes.get('/paises', PaisesController.buscarTodosPaises)
 routes.get('/estados', EstadosController.buscarTodosEstadosPorPais)
 routes.get('/cidades', CidadesController.buscarTodasCidadesPorEstado)
 routes.get('/viagens/buscarViagensHome', ViagensController.buscarViagensHome);
+routes.get('/viagens_passageiros', ViagensPassageirosController.buscarQuantidadePassageirosDaViagem)
 
 //Daqui para baixo somente as rotas de usuarios logados
 routes.use(authMiddleware)
@@ -81,6 +82,5 @@ routes.delete('/passageiros/:id', PassageirosController.delete);
 
 //Rotas Viagens_Passageiros
 routes.delete('/viagens_passageiros', ViagensPassageirosController.deletar)
-routes.get('/viagens_passageiros', ViagensPassageirosController.buscarQuantidadePassageirosDaViagem)
 
 export default routes
