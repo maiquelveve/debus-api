@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import Passageiro from '../models/Passageiro';
 import ViagemPassageiro from '../models/ViagemPassageiro';
+import Viagem from '../models/Viagem';
 import dataBaseConfig from '../../config/database';
 
 import * as yup from 'yup';
@@ -18,6 +19,11 @@ class PassageirosController {
         try {
             const {id_viagem} = req.query
             const passageiro = ajustaPassageiroParaBanco(req.body)
+
+            const vagaDisponivel = await verificaVagaDisponivel(id_viagem)
+            if(vagaDisponivel <= 0) {
+                return res.status(400).json([{success: 0, msg: 'Não há mais vagas para esta viagem.'}])  
+            }
 
             const errors = await validaPassageiro(passageiro)
             if(errors[0].success === 0) {
@@ -161,6 +167,18 @@ async function buscaCpfJaCadastradoNaViagem(passageiro) {
                     `
         const sequelize = new Sequelize(dataBaseConfig);            
         return await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT})               
+        
+    } catch (error) {
+        const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+        return res.status(500).json(retorno)
+    }
+}
+
+async function verificaVagaDisponivel(id_viagem) {
+    try {
+        const passageirosViagem = await ViagemPassageiro.findAll({ where: { id_viagem } })
+        const vagasViagem = await Viagem.findAll({where: {id: id_viagem} })
+        return vagasViagem[0].vagas - passageirosViagem.length
         
     } catch (error) {
         const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]

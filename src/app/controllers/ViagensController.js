@@ -142,7 +142,7 @@ class ViagensController {
     async buscarViagensHome(req, res) {
         try {
             const sequelize = new Sequelize(dataBaseConfig);
-            const sql = `SELECT VI.id, VI.dt_data, VI.vl_valor, VI.hh_horario, E.st_nome, 
+            const sql = `SELECT VI.id, VI.dt_data, VI.vl_valor, VI.vagas, VI.hh_horario, E.st_nome, 
                                 CO.st_nome as cidade_origem, EO.ch_sigla as estado_sigla_origem,
                                 CD.st_nome as cidade_destino, ED.ch_sigla as estado_sigla_destino
                          FROM viagens VI
