@@ -81,5 +81,6 @@ routes.delete('/passageiros/:id', PassageirosController.delete);
 
 //Rotas Viagens_Passageiros
 routes.delete('/viagens_passageiros', ViagensPassageirosController.deletar)
+routes.get('/viagens_passageiros', ViagensPassageirosController.buscarQuantidadePassageirosDaViagem)
 
 export default routes

@@ -202,7 +202,7 @@ class ViagensController {
             const { id } = req.params
 
             const sequelize = new Sequelize(dataBaseConfig);
-            const sql = `SELECT VI.id, VI.dt_data, VI.vl_valor, VI.hh_horario, VI.en_situacao,E.st_nome, VE.st_placa,
+            const sql = `SELECT VI.id, VI.dt_data, VI.vl_valor, VI.hh_horario, VI.vagas, VI.en_situacao,E.st_nome, VE.st_placa,
                                 CO.st_nome as cidade_origem, EO.ch_sigla as estado_sigla_origem,
                                 CD.st_nome as cidade_destino, ED.ch_sigla as estado_sigla_destino
                          FROM viagens VI

@@ -5,6 +5,22 @@ import dataBaseConfig from '../../config/database';
 
 class ViagensPassageirosController {
 
+    async buscarQuantidadePassageirosDaViagem(req, res) {
+        try {
+            const { id_viagem } = req.query
+            const retorno = await ViagemPassageiro.findAll({ 
+                attributes: [[ Sequelize.fn('COUNT', Sequelize.col('id')), 'qt_passageiros_viagem' ]], 
+                where: { id_viagem } 
+            })
+
+            return res.status(200).json(retorno[0])
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
+
     async deletar(req, res) {
         const sequelize = new Sequelize(dataBaseConfig)
         const transaction = await sequelize.transaction()
