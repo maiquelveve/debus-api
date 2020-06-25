@@ -261,6 +261,9 @@ class ViagensController {
     async procurarViagens(req, res) {
         try {
             const { dt_data_inicial, dt_data_final, st_nome, idCidadeOrigem, idCidadeDestino } = req.query
+
+            console.log('data', dt_data_final)
+
             let data_inicial;
             let data_final;
             
