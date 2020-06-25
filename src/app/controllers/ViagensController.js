@@ -261,7 +261,9 @@ class ViagensController {
     async procurarViagens(req, res) {
         try {
             const { dt_data_inicial, dt_data_final, st_nome, idCidadeOrigem, idCidadeDestino } = req.query
-            console.log(req.query)
+            let data_inicial;
+            let data_final;
+            
             //Montando o WHERE
             let where = "WHERE (VI.en_situacao = 'confirmada' OR VI.en_situacao = 'aguardando confirmação')"
 
@@ -269,14 +271,33 @@ class ViagensController {
                 where += ` AND CO.id = ${idCidadeOrigem}`
             }
 
-            if(idCidadeDestino !== 0) {
+            if(parseInt(idCidadeDestino) !== 0) {
                 where += ` AND CD.id = ${idCidadeDestino}`
             }
 
             if(st_nome !== '') {
                 where += ` AND E.st_nome LIKE '%${st_nome}%'`
             }
+
+            if(dt_data_inicial !== '') {
+                data_inicial = dt_data_inicial
+            } else {
+                const dataAtual = new Date()
+                const anoAtual = dataAtual.getFullYear()
+                const mesAtual = dataAtual.getMonth() + 1
+                const diaAtual = dataAtual.getDate()
+                data_inicial = `${anoAtual}-${mesAtual}-${diaAtual}`
+            }
+
+            if(dt_data_final !== '') {
+                data_final = dt_data_final
+            } else {
+                const anoAtual = new Date().getFullYear()
+                data_final = `${anoAtual}-12-31`
+            }
             
+            where += ` AND VI.dt_data BETWEEN '${data_inicial}' AND '${data_final}'`
+
             const sequelize = new Sequelize(dataBaseConfig);
             const sql = `SELECT VI.id, VI.dt_data, VI.vl_valor, VI.vagas, VI.hh_horario, E.st_nome, 
                                 CO.st_nome as cidade_origem, EO.ch_sigla as estado_sigla_origem,
@@ -294,6 +315,7 @@ class ViagensController {
                             INNER JOIN pais PD ON PD.id = ED.id_pais
                         ${where}
                         `
+
             const retorno = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT })
             return res.status(200).json(retorno)
 
