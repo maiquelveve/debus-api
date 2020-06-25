@@ -28,6 +28,7 @@ routes.get('/paises', PaisesController.buscarTodosPaises)
 routes.get('/estados', EstadosController.buscarTodosEstadosPorPais)
 routes.get('/cidades', CidadesController.buscarTodasCidadesPorEstado)
 routes.get('/viagens/buscarViagensHome', ViagensController.buscarViagensHome);
+routes.get('/viagens/procurar', ViagensController.procurarViagens);
 routes.get('/viagens_passageiros', ViagensPassageirosController.buscarQuantidadePassageirosDaViagem)
 
 //Daqui para baixo somente as rotas de usuarios logados
