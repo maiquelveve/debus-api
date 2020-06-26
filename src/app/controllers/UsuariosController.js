@@ -88,13 +88,14 @@ class UsuariosController {
                 return res.status(401).json(retornoError)
             }
 
-            const { id } = usuario;
+            const { id, st_nome } = usuario;
 
             return res.status(201).json({
                 success: 1,
                 usuario: {
                     id,
-                    st_email
+                    st_email,
+                    st_nome
                 },
                 token: jwt.sign({ id }, authConfig.secret, {
                     expiresIn: authConfig.expiresIn 
