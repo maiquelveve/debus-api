@@ -37,6 +37,10 @@ routes.use(authMiddleware)
 //Rotas para buscar o perfil de acesso do usuario logado, para libera ou não acesso a uma página
 routes.post('/buscarPerfilAcessoUsuario', ConfigController.busacarPerfilAcessoUsuario)
 
+//Rota Usuarios
+routes.get('/usuarios', UsuariosController.buscarUsuario)
+routes.put('/usuarios', UsuariosController.editarPerfil)
+
 //Rotas LocaisReferencia - Esta aqui pq precisa do id_usuario
 routes.post('/locaisReferencias', LocaisReferenciasController.cadastrar)
 routes.get('/locaisReferencias', LocaisReferenciasController.buscarLocaisReferenciasPorCidades)

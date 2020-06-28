@@ -7,6 +7,54 @@ import validacaoDefinicao from '../../config/validacaoDefinicao';
 
 class UsuariosController {
 
+    async editarPerfil(req, res) {
+        try {
+            const {id_usuario, st_nome, st_email} = req.body
+
+            //Validaçõe do req.body Inicio
+            yup.setLocale(validacaoDefinicao)
+            const schemaValidate = yup.object().shape({
+                st_nome: yup
+                    .string()
+                    .max(50)
+                    .required(),
+                    
+                st_email: yup
+                    .string()
+                    .max(50)
+                    .email()
+                    .required(),
+            })
+
+            const erros = await schemaValidate.validate(req.body, { abortEarly: false }).then( () => false ).catch( () => true)
+            if(erros === true) {
+                const retorno = [{success: 0, msg: 'Ocorreu um erro. Verifique os dados informados!'}]
+                return res.status(400).json(retorno)
+            }                            
+            //Validaçõe do req.body FINAL
+
+            //Verifica se email ja esta cadastrado
+            const emailExists = await Usuario.findOne({ where: {st_email: st_email} })
+            if(emailExists) {
+                const usuarioAtual = await Usuario.findByPk(id_usuario)
+
+                if(usuarioAtual.st_email !== st_email) {
+                    const retorno = [{success: 0, msg:'Email já cadastrado'}]
+                    return res.status(400).json(retorno)
+                }
+            } 
+
+            //Ediatndo o perfil do usuario logado
+            await Usuario.update({st_nome, st_email}, { where: {id: id_usuario} });
+            const retorno = [{success: 1, msg: 'ok'}]                
+            return res.status(200).json(retorno) 
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Verifique os dados informados!'}]                
+            return res.status(500).json(retorno)  
+        }
+    }
+
     async cadastrar(req, res) {
         try {
             //Validaçõe do req.body Inicio
@@ -105,6 +153,18 @@ class UsuariosController {
         } catch (error) {
             const retorno = [{success: 0, msg: 'Ocorreu um erro. Verifique os dados informados!'}]                
             return res.status(400).json(retorno)
+        }
+    }
+
+    async buscarUsuario(req, res) {
+        try {
+            const {id_usuario} = req.body
+            const usuario = await Usuario.findByPk(id_usuario)
+            return res.status(200).json(usuario)
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
+            return res.status(500).json(retorno)
         }
     }
 }
