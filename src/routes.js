@@ -61,8 +61,10 @@ routes.put('/veiculos/desativar/:id', VeiculosController.desativar);
 //Rotas Empresas
 routes.post('/empresas', EmpresasController.cadastrar);
 routes.get('/empresas', EmpresasController.listar);
+routes.get('/empresas/pesquisar', EmpresasController.pesquisar);
 routes.get('/empresas/buscarDoUsuario', EmpresasController.buscarEmpresasUsuario)
 routes.get('/empresas/:id', EmpresasController.buscarEmpresa);
+routes.get('/empresas/visualizar/:id', EmpresasController.visualizar);
 routes.put('/empresas/:id', EmpresasController.editar);
 routes.put('/empresas/ativar/:id', EmpresasController.ativar);
 routes.put('/empresas/desativar/:id', EmpresasController.desativar);

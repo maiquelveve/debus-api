@@ -120,11 +120,49 @@ class EmpresasController {
         }
     }
 
+    async pesquisar(req, res) {
+        try {
+            const {st_nome, st_recefi, ch_ativo} = req.query   
+
+            let where= {}
+            where.id_usuario = {[Op.gt]: 0} // so para liberar e ter ao menos uma condição, esse aqui sempre retorno TRUE pq eh "id_usuario > 0"
+            if(st_nome.trim() !== '') {
+                where.st_nome = {[Op.substring]: [st_nome]}
+            }
+            if(st_recefi.trim() !== '') {
+                where.st_recefi = st_recefi
+            }
+            if(ch_ativo.trim() === 'S' || ch_ativo.trim() === 'N') {
+                where.ch_ativo = ch_ativo
+            }
+            
+            const retorno = await Empresa.findAll({ where, limit: 20, order: [['ch_ativo', 'DESC'], ['id', 'ASC']] }) //st_nome: {[Op.substring]: [st_nome]} eh o operado igual a CAMPO LIKE '%text%'           
+
+            return res.status(200).json(retorno)   
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
+            return res.status(500).json(retorno)  
+        }
+    }
+
     async buscarEmpresa(req, res) {
         try {
             const id_usuario = req.body.id_usuario
             const id = req.params.id
             const empresa = await Empresa.findOne({ where: { id, id_usuario } })
+            return res.status(200).json(empresa);
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
+            return res.status(500).json(retorno)  
+        }
+    }
+
+    async visualizar(req, res) {
+        try {
+            const id = req.params.id
+            const empresa = await Empresa.findOne({ where: { id } })
             return res.status(200).json(empresa);
 
         } catch (error) {
