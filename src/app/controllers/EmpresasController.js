@@ -66,10 +66,9 @@ class EmpresasController {
 
     async ativar(req, res) {
         try {
-            const { id_usuario } = req.body
             const { id } = req.params
 
-            await Empresa.update({ ch_ativo: 'S' }, {where: { id, id_usuario}})
+            await Empresa.update({ ch_ativo: 'S' }, {where: { id }})
             const retorno = [{success: 1, msg: 'ok'}]
             res.status(200).json(retorno)
 
@@ -81,10 +80,9 @@ class EmpresasController {
 
     async desativar(req, res) {
         try {
-            const { id_usuario } = req.body
             const { id } = req.params
 
-            await Empresa.update({ ch_ativo: 'N' }, {where: { id, id_usuario}})
+            await Empresa.update({ ch_ativo: 'N' }, {where: { id }})
             const retorno = [{success: 1, msg: 'ok'}]
             res.status(200).json(retorno)
 

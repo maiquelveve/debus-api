@@ -101,6 +101,56 @@ class VeiculosController {
         }
     }
 
+    async pesquisar(req, res) {
+        try {
+            const { ch_ativo, st_nome } = req.query;
+            const st_placa = req.query.st_placa.normalize('NFD').replace(/[^a-zA-Z0-9s]/g, "").toUpperCase()
+
+            let where = `WHERE E.ch_ativo = 'S'`;
+            if(st_nome.trim() !== '') {
+                where += ` AND E.st_nome LIKE '%${st_nome}%'`
+            }
+            if(st_placa.trim() !== '') {
+                where += ` AND V.st_placa = '${st_placa}'`
+            }
+            if(ch_ativo.trim() === 'S' || ch_ativo.trim() === 'N') {
+                where += ` AND V.ch_ativo = '${ch_ativo}'`
+            }
+
+            const sequelize = new Sequelize(dataBaseConfig);
+            const sql = `SELECT V.id, V.st_placa, V.nr_lugares, V.ch_ativo, E.st_nome 
+                         FROM veiculos V 
+                            INNER JOIN empresas E ON E.id = V.id_empresa 
+                        ${where}
+                        ORDER BY ch_ativo DESC, id ASC
+                        LIMIT 10`;
+            const veiculos = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT})                        
+            res.status(200).json(veiculos)
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde!'}]                
+            return res.status(500).json(retorno) 
+        }
+    }
+
+    async visualizar(req, res) {
+        try {
+            const { id } = req.params
+            
+            const sequelize = new Sequelize(dataBaseConfig);
+            const sql = `SELECT V.id, V.st_placa, V.nr_lugares, V.id_empresa, E.st_nome 
+                         FROM veiculos V 
+                            INNER JOIN empresas E ON E.id = V.id_empresa 
+                         WHERE V.id = ${id}`
+            const veiculo = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT}) 
+            return res.status(200).json(veiculo[0])      
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro ao buscar o veículo. Tente novamente mais tarde!'}]                
+            return res.status(500).json(retorno)
+        }
+    }
+    
     async buscarVeiculo(req, res) {
         try {
             const id_usuario = req.body.id_usuario
