@@ -88,6 +88,54 @@ class ViagensController {
         }
     }
 
+    async pesquisar(req, res) {
+        try {
+            const { st_nome, en_situacao, dt_data, id_cidade_origem, id_cidade_destino } = req.query
+            
+            let where = `WHERE 1 = 1`
+            if(parseInt(id_cidade_origem) !== 0) {
+                where += ` AND CO.id = ${id_cidade_origem}`
+            }
+            if(parseInt(id_cidade_destino) !== 0) {
+                where += ` AND CD.id = ${id_cidade_destino}`
+            }
+            if(st_nome !== '') {
+                where += ` AND E.st_nome LIKE "%${st_nome}%"`
+            }
+            if(en_situacao !== '') {
+                where += ` AND VI.en_situacao = "${en_situacao}"`
+            }
+            if(dt_data !== '') {
+                where += ` AND VI.dt_data = "${dt_data}"`
+            }
+            
+            const sequelize = new Sequelize(dataBaseConfig);
+            const sql = `SELECT VI.id, VI.en_situacao, VI.dt_data, VE.st_placa, E.st_nome, VE.st_placa,
+                                CO.st_nome AS cidade_origem, EO.ch_sigla AS estado_sigla_origem, PO.ch_sigla AS pais_sigla_origem,
+                                CD.st_nome AS cidade_destino, ED.ch_sigla AS estado_sigla_destino, PD.ch_sigla AS pais_sigla_destino
+                         FROM viagens VI
+                            INNER JOIN veiculos VE ON VE.id = VI.id_veiculo
+                            INNER JOIN empresas E ON E.id = VE.id_empresa
+                            INNER JOIN locais_referencias LRO ON LRO.id = VI.nr_id_local_referencia_origem
+                            INNER JOIN cidades CO ON CO.id = LRO.id_cidade
+                            INNER JOIN estados EO ON EO.id = CO.id_estado
+                            INNER JOIN pais PO ON PO.id = EO.id_pais
+                            INNER JOIN locais_referencias LRD ON LRD.id = VI.nr_id_local_referencia_destino
+                            INNER JOIN cidades CD ON CD.id = LRD.id_cidade
+                            INNER JOIN estados ED ON ED.id = CD.id_estado
+                            INNER JOIN pais PD ON PD.id = ED.id_pais
+                         ${where}
+                        `
+            
+            const retorno = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT })
+            return res.status(200).json(retorno)
+
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)  
+        }
+    }
+
     async minhasViagens(req, res) {
         try {
             const { nr_id_local_referencia_origem, en_situacao, dt_data } = req.query
@@ -172,7 +220,9 @@ class ViagensController {
             const { id } = req.params
 
             const sequelize = new Sequelize(dataBaseConfig);
-            const sql = `SELECT VI.id, VI.dt_data, VI.vl_valor, VI.hh_horario, VI.en_situacao,E.st_nome, VE.st_placa,
+            const sql = `SELECT VI.id, VI.dt_data, VI.vl_valor, VI.hh_horario, VI.en_situacao, VI.vagas,
+                                E.st_nome, 
+                                VE.st_placa,
                                 CO.st_nome as cidade_origem, EO.ch_sigla as estado_sigla_origem,
                                 CD.st_nome as cidade_destino, ED.ch_sigla as estado_sigla_destino
                          FROM viagens VI

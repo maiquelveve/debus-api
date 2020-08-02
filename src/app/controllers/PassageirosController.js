@@ -117,6 +117,26 @@ class PassageirosController {
             return res.status(500).json(retorno)
         }
     }
+
+    async buscarTodosPassageirosPorViagem(req, res) {
+        try {
+            const {id_viagem} = req.query
+            
+            const sql = `SELECT P.id, P.st_nome, P.st_cpf 
+                         FROM passageiros P 
+                            INNER JOIN viagens_passageiros VP ON P.id = VP.id_passageiro
+                        WHERE VP.id_viagem = ${id_viagem}
+                        `
+            const sequelize = new Sequelize(dataBaseConfig);            
+            const passageiros = await sequelize.query(sql, { type: sequelize.QueryTypes.SELECT})              
+
+            return res.status(200).json(passageiros)
+            
+        } catch (error) {
+            const retorno = [{success: 0, msg: 'Ocorreu um erro. Tente novamente mais tarde.'}]
+            return res.status(500).json(retorno)
+        }
+    }
 }
 
 async function validaPassageiro(passageiro) {

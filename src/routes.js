@@ -74,6 +74,7 @@ routes.put('/empresas/desativar/:id', EmpresasController.desativar);
 //Rotas Viagens
 routes.post('/viagens', ViagensController.cadastrar);
 routes.get('/viagens', ViagensController.listar);
+routes.get('/viagens/pesquisar', ViagensController.pesquisar);
 routes.get('/viagens/minhas_viagens', ViagensController.minhasViagens);
 routes.get('/viagens/visualizar/:id', ViagensController.buscarViagensVisualizar);
 routes.get('/viagens/:id', ViagensController.buscarViagem);
@@ -86,6 +87,7 @@ routes.put('/viagens/reativar/:id', ViagensController.reativar);
 //Rotas Passageiros
 routes.post('/passageiros', PassageirosController.cadastrar);
 routes.get('/passageiros', PassageirosController.buscarPassageirosPorViagem);
+routes.get('/passageiros/buscarTodos', PassageirosController.buscarTodosPassageirosPorViagem);
 routes.put('/passageiros/:id', PassageirosController.editar);
 routes.delete('/passageiros/:id', PassageirosController.delete);
 
