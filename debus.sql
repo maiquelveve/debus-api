@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05-Jun-2020 às 02:13
+-- Tempo de geração: 14-Out-2020 às 22:20
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.1
 
@@ -5659,7 +5659,7 @@ CREATE TABLE `empresas` (
 
 INSERT INTO `empresas` (`id`, `st_nome`, `st_recefi`, `st_cel`, `ch_ativo`, `id_usuario`) VALUES
 (1, 'FRAN TUR', '123999', '992009666', 'S', 1),
-(2, 'VEVE TUR', '123456', '99512487', 'S', 1),
+(2, 'VEVE TUR', '123456', '99512487', 'S', 2),
 (4, 'tazo tUr', '9876543210', '519985466584', 'S', 1),
 (5, 'TESTE ', '123', '151951651', 'N', 1),
 (6, 'lalalalLLLasdLLL', '1234567892151', '2151651', 'S', 1),
@@ -5788,9 +5788,10 @@ CREATE TABLE `passageiros` (
 --
 
 INSERT INTO `passageiros` (`id`, `st_nome`, `st_cpf`, `id_usuario`) VALUES
-(36, 'maiquel', '01875381074', 1),
-(37, 'maiquel', '92425212051', 1),
-(38, 'Maiquel Leites', '01875381074', 1);
+(52, 'maiquel', '01875381074', 1),
+(53, 'fran', '46897170011', 1),
+(54, 'maiquel', '01875381074', 1),
+(55, 'thiago', '71191208087', 2);
 
 -- --------------------------------------------------------
 
@@ -5811,8 +5812,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `st_nome`, `st_email`, `st_senha`, `ch_perfil`) VALUES
-(1, 'Maiquel Leites', 'maiquel@gmail.com', '$2a$08$2VfVOdiu88.N8hWEp/hrFeLrYQ/ZkxhHqK8/Pk3KMnVf0EOsIdR12', 'C'),
-(2, 'fran leites', 'fran@gmail.com', '$2a$08$XScl15KCxqA0P1m0RZKrw.uIZ8a5gxFhBmIW2JnOqzVhFvhG1dkZ.', 'C');
+(1, 'Maiquel Leites', 'maiquel@gmail.com', '$2a$08$2VfVOdiu88.N8hWEp/hrFeLrYQ/ZkxhHqK8/Pk3KMnVf0EOsIdR12', 'E'),
+(2, 'fran leites', 'fran@gmail.com', '$2a$08$XScl15KCxqA0P1m0RZKrw.uIZ8a5gxFhBmIW2JnOqzVhFvhG1dkZ.', 'A'),
+(3, 'Marines Silva dos Santos', 'ines@gmail.com', '$2a$08$pBmskyDT/6EXR2v0RzWdY.Ng3ncnzxZQsBg.gJecwBYLgJkyR6jyu', 'C');
 
 -- --------------------------------------------------------
 
@@ -5834,7 +5836,7 @@ CREATE TABLE `veiculos` (
 
 INSERT INTO `veiculos` (`id`, `st_placa`, `nr_lugares`, `ch_ativo`, `id_empresa`) VALUES
 (1, 'IQY3336', 4, 'S', 1),
-(2, 'GUN3271', 40, 'S', 1);
+(2, 'GUN3271', 40, 'S', 2);
 
 -- --------------------------------------------------------
 
@@ -5859,9 +5861,9 @@ CREATE TABLE `viagens` (
 --
 
 INSERT INTO `viagens` (`id`, `vagas`, `hh_horario`, `dt_data`, `vl_valor`, `nr_id_local_referencia_origem`, `nr_id_local_referencia_destino`, `id_veiculo`, `en_situacao`) VALUES
-(15, 4, '15:44:00', '2020-05-15', 15, 2, 12, 1, 'aguardando confirmação'),
-(16, 2, '15:22:00', '2020-06-11', 0, 12, 2, 1, 'aguardando confirmação'),
-(17, 1, '12:33:00', '2020-06-20', 52, 12, 2, 1, 'aguardando confirmação');
+(15, 4, '15:44:00', '2020-06-11', 15, 2, 12, 1, 'aguardando confirmação'),
+(16, 2, '15:22:00', '2020-06-11', 0, 12, 2, 1, 'confirmada'),
+(17, 5, '12:33:00', '2020-06-20', 52, 12, 2, 1, 'aguardando confirmação');
 
 -- --------------------------------------------------------
 
@@ -5880,9 +5882,10 @@ CREATE TABLE `viagens_passageiros` (
 --
 
 INSERT INTO `viagens_passageiros` (`id`, `id_viagem`, `id_passageiro`) VALUES
-(36, 16, 36),
-(37, 16, 37),
-(38, 15, 38);
+(52, 17, 52),
+(53, 17, 53),
+(54, 16, 54),
+(55, 16, 55);
 
 --
 -- Índices para tabelas despejadas
@@ -5998,13 +6001,13 @@ ALTER TABLE `pais`
 -- AUTO_INCREMENT de tabela `passageiros`
 --
 ALTER TABLE `passageiros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
@@ -6022,7 +6025,7 @@ ALTER TABLE `viagens`
 -- AUTO_INCREMENT de tabela `viagens_passageiros`
 --
 ALTER TABLE `viagens_passageiros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- Restrições para despejos de tabelas
