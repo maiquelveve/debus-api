@@ -10,4 +10,4 @@ podem consultar estas viagens e fazer a reserva para a viagem que desejar.
 Esta API foi desenvolvida com NODE JS, utilizando o express, sequelize, banco em MySQL, conta com autenticação com JWT - JasonWebToken.
 
 
-Como dependencia de desenvolvimento também foi utilizado o SUCRASE nesse projeto.
+Como dependência de desenvolvimento também foi utilizado o SUCRASE nesse projeto, com a finalidade de manter um padrão de sintaxe.
