@@ -3,7 +3,7 @@
 API Debus
 
 
-É uma API para um sistema de ofertas de viagens, onde as empresas de turismo podem cadastrar-se, cadastrar seus veículos e criar suas viagens. Por outro lado os demais usuários 
+É uma API RESTful para um sistema de ofertas de viagens, onde as empresas de turismo podem cadastrar-se, cadastrar seus veículos e criar suas viagens. Por outro lado os demais usuários 
 podem consultar estas viagens e fazer a reserva para a viagem que desejar.
 
 
